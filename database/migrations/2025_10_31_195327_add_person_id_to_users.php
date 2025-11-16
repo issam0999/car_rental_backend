@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('centers', function (Blueprint $table) {
-            $table->tinyInteger('status')->default(1)->after('logo');
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('person_id')->nullable()
+                ->constrained('people')
+                ->cascadeOnDelete();
         });
     }
 
@@ -21,8 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('centers', function (Blueprint $table) {
-            $table->dropColumn('status');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign('person_id');
+            $table->dropColumn('person_id');
         });
     }
 };

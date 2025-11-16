@@ -16,6 +16,12 @@ class CenterSeeder extends Seeder
             'name' => 'Admin',
             'description' => 'Squarely admin center',
             'location' => 'Dubai, UAE',
+            'subscription_type' => 1,
+            'industry_id' => 1,
+            'status' => 1,
         ]);
+
+        DB::table('users')->update(['center_id' => 1]);
+
     }
 }

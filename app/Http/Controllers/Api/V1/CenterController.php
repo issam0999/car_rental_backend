@@ -21,7 +21,7 @@ class CenterController extends Controller
      */
     public function index()
     {
-        $centers = Center::all();
+        $centers = Center::with(['industry:id,name'], ['package:id,name'])->get();
 
         return ApiResponse::success(
             CenterResource::collection($centers),
@@ -42,6 +42,7 @@ class CenterController extends Controller
                 'email' => 'required|email|unique:centers,email',
                 'description' => 'string|max:255|nullable',
                 'subscription_type' => 'integer',
+                'industry' => 'integer',
             ]);
 
             $center = Center::create([
@@ -58,6 +59,7 @@ class CenterController extends Controller
                 'password' => Str::password(),
             ]);
             DB::commit();
+
             // Send email
             Mail::to($center->email)
                 ->queue(new CenterCreatedMail($request->user(), $center));
@@ -78,6 +80,8 @@ class CenterController extends Controller
      */
     public function show(Center $center)
     {
+        $center->load(['industry:id,name', 'package:id,name']);
+
         return ApiResponse::success(new CenterResource($center), 'Center retrieved successfully');
     }
 

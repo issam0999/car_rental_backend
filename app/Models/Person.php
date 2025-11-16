@@ -6,13 +6,15 @@ use App\Helpers\FileHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
-class Contact extends Model
+class Person extends Model
 {
     use HasFactory;
+
     public const STATUS_ACTIVE = 1;
+
     public const STATUS_DELETED = 0;
+
     public const TYPE_CONTACT = 1;
 
     protected $fillable = [
@@ -27,8 +29,9 @@ class Contact extends Model
         'address',
         'city_id',
         'image',
-        'avatar'
+        'avatar',
     ];
+
     protected $casts = [
         'date_of_birth' => 'date',
     ];
@@ -44,15 +47,17 @@ class Contact extends Model
      */
     public static function getBasePath($centerId): string
     {
-        return 'centers/' . $centerId . '/contacts';
+        return 'centers/'.$centerId.'/persons';
     }
+
     /**
      * Get full public URL
      */
     public function getImageUrl($filePath)
     {
-        return asset('storage/' . $filePath);
+        return asset('storage/'.$filePath);
     }
+
     public function saveImage($image)
     {
         $basePath = self::getBasePath($this->center_id);
@@ -61,6 +66,7 @@ class Contact extends Model
         if ($this->image) {
             FileHelper::deleteImage($this->image);
         }
+
         return FileHelper::saveBase64Image($image, $basePath);
     }
 }

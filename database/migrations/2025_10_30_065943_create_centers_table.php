@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('centers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('industry_id')->constrained('industries')->cascadeOnDelete();
+            $table->foreignId('subscription_type')->constrained('center_packages')->cascadeOnDelete();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('subscription_type')->default(1)->comment('1: free, 2: paid');
             $table->string('location')->nullable();
             $table->string('phone')->nullable();
             $table->string('phone1')->nullable();
             $table->string('email')->nullable();
             $table->string('email1')->nullable();
             $table->string('logo')->nullable();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('contact_id')->nullable()
-                ->constrained('contacts')
-                ->cascadeOnDelete();
+        Schema::create('industries', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -23,9 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign('contact_id');
-            $table->dropColumn('contact_id');
-        });
+        Schema::dropIfExists('industries');
     }
 };

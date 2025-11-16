@@ -24,7 +24,10 @@ class CenterResource extends JsonResource
             'email' => $this->email,
             'email1' => $this->email1,
             'avatar' => $this->logo,
-            'status' => $this->status ? 'active' : 'inactive',
+            'status' => $this->status,
+            'created_at' => $this->created_at?->toDateString(),
+            'package' => new CenterPackageResource($this->package),
+            'industry' => new IndustryResource($this->industry),
         ];
     }
 }

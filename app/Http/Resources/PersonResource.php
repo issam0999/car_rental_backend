@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Contact;
+use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ContactResource extends JsonResource
+class PersonResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -26,7 +26,7 @@ class ContactResource extends JsonResource
             'date_of_birth' => $this->date_of_birth,
             'country_id' => $this->country_id,
             'city_id' => $this->city_id,
-            'status' => $this->status === Contact::STATUS_ACTIVE,
+            'status' => $this->status === Person::STATUS_ACTIVE,
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
         ];
