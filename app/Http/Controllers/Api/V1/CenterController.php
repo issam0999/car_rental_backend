@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CenterResource;
 use App\Http\Responses\ApiResponse;
-use App\Mail\CenterCreatedMail;
+use App\Mail\CenterCreated;
 use App\Models\Center;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,12 +19,50 @@ class CenterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $centers = Center::with(['industry:id,name'], ['package:id,name'])->get();
+        $query = Center::with('industry', 'package');
+
+        // Search
+        if ($request->filled('q')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->q}%")
+                    ->orWhere('location', 'like', "%{$request->q}%")
+                    ->orWhere('email', 'like', "%{$request->q}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $arr = ['active' => 1, 'suspended' => 0];
+            $query->where('status', $arr[$request->status]);
+        }
+
+        // Industry filter
+        if ($request->filled('industry')) {
+            $query->where('industry_id', $request->industry);
+        }
+
+        // Package filter
+        if ($request->filled('package')) {
+            $query->where('subscription_type', $request->package);
+        }
+
+        // Sorting
+        if ($request->filled('sortBy') && $request->filled('orderBy')) {
+            $query->orderBy($request->sortBy, $request->orderBy);
+        }
+
+        // Paginate
+        $data = $query->paginate($request->get('itemsPerPage', 15));
 
         return ApiResponse::success(
-            CenterResource::collection($centers),
+            [
+                'items' => CenterResource::collection($data),
+                'total' => $data->total(),
+                'currentPage' => $data->currentPage(),
+                'lastPage' => $data->lastPage(),
+            ],
             'Centers retrieved successfully'
         );
     }
@@ -36,33 +74,31 @@ class CenterController extends Controller
     {
         DB::beginTransaction();
         try {
-
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:centers,email',
                 'description' => 'string|max:255|nullable',
-                'subscription_type' => 'integer',
-                'industry' => 'integer',
+                'subscription_type' => 'integer|exists:center_packages,id',
             ]);
 
             $center = Center::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'description' => $validated['description'] || '',
-                'subscription_type' => 1,
+                'subscription_type' => $validated['subscription_type'],
             ]);
 
+            $password = Str::password();
             User::CreateNew([
                 'name' => 'Admin for '.$center->name,
                 'email' => $center->email,
                 'center_id' => $center->id,
-                'password' => Str::password(),
+                'password' => $password,
             ]);
             DB::commit();
 
             // Send email
-            Mail::to($center->email)
-                ->queue(new CenterCreatedMail($request->user(), $center));
+            Mail::to($center->email)->queue(new CenterCreated($center->load('package'), $request->user(), $password));
 
             return ApiResponse::success(
                 new CenterResource($center),

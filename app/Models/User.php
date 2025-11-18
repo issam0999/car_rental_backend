@@ -83,6 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'person_id' => $person->id,
+            'center_id' => $data['center_id'] ?? 1,
         ]);
 
         $user->sendEmailVerificationNotification();

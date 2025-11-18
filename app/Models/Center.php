@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Center extends Model
 {
@@ -16,14 +17,14 @@ class Center extends Model
         'email',
         'email1',
         'logo',
-        'industry',
+        'industry', 'subscription_type',
         'status',
 
     ];
 
-    public function user(): BelongsTo
+    public function users(): HasMany
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 
     public function industry(): BelongsTo
@@ -33,6 +34,6 @@ class Center extends Model
 
     public function package(): BelongsTo
     {
-        return $this->belongsTo(CenterPackage::class);
+        return $this->belongsTo(CenterPackage::class, 'subscription_type');
     }
 }
