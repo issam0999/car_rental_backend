@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a53f2e5856dab0d07ccd204727c0f67",
+    "content-hash": "82976f8dfa66f8d76ccd63aae06e4766",
     "packages": [
         {
             "name": "brick/math",
@@ -137,16 +137,16 @@
         },
         {
             "name": "dedoc/scramble",
-            "version": "v0.13.2",
+            "version": "v0.13.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dedoc/scramble.git",
-                "reference": "0879b46a2b398e7e55598f5a25e0783c3e3ae43c"
+                "reference": "773f9d41b68a9bd52120648e55068bfbe9be567e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dedoc/scramble/zipball/0879b46a2b398e7e55598f5a25e0783c3e3ae43c",
-                "reference": "0879b46a2b398e7e55598f5a25e0783c3e3ae43c",
+                "url": "https://api.github.com/repos/dedoc/scramble/zipball/773f9d41b68a9bd52120648e55068bfbe9be567e",
+                "reference": "773f9d41b68a9bd52120648e55068bfbe9be567e",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
             ],
             "support": {
                 "issues": "https://github.com/dedoc/scramble/issues",
-                "source": "https://github.com/dedoc/scramble/tree/v0.13.2"
+                "source": "https://github.com/dedoc/scramble/tree/v0.13.4"
             },
             "funding": [
                 {
@@ -213,7 +213,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-30T14:12:39+00:00"
+            "time": "2025-11-16T07:10:35+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -1535,6 +1535,75 @@
                 "source": "https://github.com/laravel/serializable-closure"
             },
             "time": "2025-10-09T13:42:30+00:00"
+        },
+        {
+            "name": "laravel/telescope",
+            "version": "v5.15.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/telescope.git",
+                "reference": "cbdd61b025dddeccaffefc3b54d327c4e0a410b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/telescope/zipball/cbdd61b025dddeccaffefc3b54d327c4e0a410b6",
+                "reference": "cbdd61b025dddeccaffefc3b54d327c4e0a410b6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^8.37|^9.0|^10.0|^11.0|^12.0",
+                "php": "^8.0",
+                "symfony/console": "^5.3|^6.0|^7.0",
+                "symfony/var-dumper": "^5.0|^6.0|^7.0"
+            },
+            "require-dev": {
+                "ext-gd": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "laravel/octane": "^1.4|^2.0|dev-develop",
+                "orchestra/testbench": "^6.40|^7.37|^8.17|^9.0|^10.0",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^9.0|^10.5|^11.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Telescope\\TelescopeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Telescope\\": "src/",
+                    "Laravel\\Telescope\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Mohamed Said",
+                    "email": "mohamed@laravel.com"
+                }
+            ],
+            "description": "An elegant debug assistant for the Laravel framework.",
+            "keywords": [
+                "debugging",
+                "laravel",
+                "monitoring"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/telescope/issues",
+                "source": "https://github.com/laravel/telescope/tree/v5.15.0"
+            },
+            "time": "2025-10-23T15:19:35+00:00"
         },
         {
             "name": "laravel/tinker",

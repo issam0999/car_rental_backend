@@ -14,7 +14,7 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     });
     Route::prefix('v1')->group(function () {
         Route::apiResource('users', UserController::class);
-        Route::apiResource('contacts', PersonController::class);
+        Route::apiResource('people', PersonController::class);
         Route::apiResource('centers', CenterController::class);
         Route::apiResource('industries', IndustryController::class);
         Route::apiResource('center-packages', CenterPackageController::class);
