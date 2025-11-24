@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -62,6 +63,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function center(): BelongsTo
     {
         return $this->belongsTo(Center::class);
+    }
+
+    protected function status(): Attribute
+    {
+        $statuses = [0 => 'inactive', 1 => 'active'];
+
+        return Attribute::make(
+            get: fn (string $value) => $statuses[$value],
+        );
     }
 
     /**

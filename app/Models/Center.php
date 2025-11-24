@@ -32,6 +32,11 @@ class Center extends Model
         return $this->belongsTo(Industry::class);
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'location');
+    }
+
     public function package(): BelongsTo
     {
         return $this->belongsTo(CenterPackage::class, 'subscription_type');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,8 +21,12 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'verified' => (bool) $this->email_verified_at,
             'created_at' => $this->created_at?->toDateTimeString(),
-            'role' => 'admin',
-            'contact' => new PersonResource($this->whenLoaded('contact')),
+            'status' => $this->status,
+            'role' => [
+                'id' => 1,
+                'name' => 'Admin'],
+            'person' => new PersonResource($this->whenLoaded('person')),
+            'report_to' => Person::select(['id', 'name', 'image'])->get()->toArray(),
         ];
     }
 }

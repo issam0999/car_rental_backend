@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('subscription_type')->constrained('center_packages')->cascadeOnDelete();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('location')->nullable();
+            $table->integer('location')->nullable()->default(2)->comment('Country Id');
             $table->string('phone')->nullable();
             $table->string('phone1')->nullable();
             $table->string('email')->nullable();
