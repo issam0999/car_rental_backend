@@ -20,6 +20,14 @@ class CenterSeeder extends Seeder
             'industry_id' => 1,
             'status' => 1,
         ]);
+        DB::table('centers')->insert([
+            'name' => 'Squarely Business Management',
+            'description' => 'Squarely Business Management',
+            'location' => 'Dubai, UAE',
+            'subscription_type' => 1,
+            'industry_id' => 1,
+            'status' => 1,
+        ]);
 
         DB::table('users')->update(['center_id' => 1]);
 
