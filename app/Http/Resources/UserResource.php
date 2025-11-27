@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'verified' => (bool) $this->email_verified_at,
             'created_at' => $this->created_at?->toDateTimeString(),
             'status' => $this->status,
+            'center' => $this->center,
             'role' => [
                 'id' => 1,
                 'name' => 'Admin'],
