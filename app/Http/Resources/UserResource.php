@@ -23,9 +23,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at?->toDateTimeString(),
             'status' => $this->status,
             'center' => $this->center,
-            'role' => [
-                'id' => 1,
-                'name' => 'Admin'],
+            'role' => 'admin',
             'person' => new PersonResource($this->whenLoaded('person')),
             'report_to' => Person::select(['id', 'name', 'image'])->get()->toArray(),
         ];
