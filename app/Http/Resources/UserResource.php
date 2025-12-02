@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Person;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,8 +24,8 @@ class UserResource extends JsonResource
             'status' => $this->status,
             'center' => $this->center,
             'role' => 'admin',
-            'person' => new PersonResource($this->whenLoaded('person')),
-            'report_to' => Person::select(['id', 'name', 'image'])->get()->toArray(),
+            'contact' => new ContactResource($this->whenLoaded('contact')),
+            'report_to' => Contact::select(['id', 'name', 'image'])->where('id', 1)->get()->toArray(),
         ];
     }
 }

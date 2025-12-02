@@ -28,7 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'person_id',
+        'contact_id',
         'center_id',
     ];
 
@@ -55,9 +55,9 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function person(): BelongsTo
+    public function contact(): BelongsTo
     {
-        return $this->belongsTo(Person::class);
+        return $this->belongsTo(Contact::class);
     }
 
     public function center(): BelongsTo
@@ -81,18 +81,18 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public static function createNew(array $data): User
     {
-        // First create the person
-        $person = Person::create([
+        // First create the contact record
+        $contact = Contact::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'center_id' => $data['center_id'] ?? 1,
-            'status' => Person::STATUS_ACTIVE,
-            'type_id' => Person::TYPE_CONTACT,
+            'status' => Contact::STATUS_ACTIVE,
+            'type_id' => Contact::TYPE_CONTACT,
         ]);
         $user = User::create([
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'person_id' => $person->id,
+            'contact_id' => $contact->id,
             'center_id' => $data['center_id'] ?? 1,
         ]);
 

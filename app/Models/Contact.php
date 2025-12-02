@@ -6,8 +6,9 @@ use App\Helpers\FileHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Person extends Model
+class Contact extends Model
 {
     use HasFactory;
 
@@ -15,7 +16,16 @@ class Person extends Model
 
     public const STATUS_DELETED = 0;
 
-    public const TYPE_CONTACT = 1;
+    public const CONTACT = 1;
+
+    public const TYPE_INDIVIDUAL = 1;
+
+    public const TYPE_ORGANIZATION = 2;
+
+    public const TYPE_ARR = [
+        self::TYPE_INDIVIDUAL => ['name' => 'Individual', 'color' => 'secondary'],
+        self::TYPE_ORGANIZATION => ['name' => 'Organization', 'color' => 'primary'],
+    ];
 
     protected $fillable = [
         'name',
@@ -41,13 +51,18 @@ class Person extends Model
         return $this->belongsTo(Center::class);
     }
 
+    public function connections(): HasMany
+    {
+        return $this->hasMany(ContactConnection::class);
+    }
+
     /**
      * Get the base path for images.
      * Can be reused anywhere.
      */
     public static function getBasePath($centerId): string
     {
-        return 'centers/'.$centerId.'/persons';
+        return 'centers/'.$centerId.'/contacts';
     }
 
     /**
@@ -56,6 +71,11 @@ class Person extends Model
     public function getImageUrl($filePath)
     {
         return asset('storage/'.$filePath);
+    }
+
+    public function getType(): ?array
+    {
+        return self::TYPE_ARR[$this->type_id] ?? null;
     }
 
     public function saveImage($image)

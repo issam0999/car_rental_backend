@@ -14,7 +14,7 @@ class ContactSeeder extends Seeder
     {
         $rows = [
             ['center_id' => 1, 'type_id' => 1, 'name' => 'Issam Hajj Ali', 'email' => 'isamhajjali@gmail.com'], ];
-        DB::table('people')->insert($rows);
-        DB::table('users')->update(['person_id' => 1]);
+        DB::table('contacts')->insert($rows);
+        DB::table('users')->update(['contact_id' => 1]);
     }
 }

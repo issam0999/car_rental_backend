@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::with('person')->get();
+        $user = User::with('contact')->get();
 
         return ApiResponse::success(UserResource::collection($user), 'Users retrieved successfully');
     }
@@ -47,7 +47,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load('person');
+        $user->load('contact');
 
         return ApiResponse::success(new UserResource($user), 'User retrieved successfully');
     }

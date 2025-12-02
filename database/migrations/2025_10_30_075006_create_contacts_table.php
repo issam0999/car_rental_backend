@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('people', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('center_id')->constrained('centers')->cascadeOnDelete();
-            $table->unsignedBigInteger('type_id')->comment('1: contact, 2: client');
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->date('date_of_birth')->nullable();
-            $table->unsignedBigInteger('country_id')->nullable();
-            $table->unsignedBigInteger('city_id')->nullable();
+            $table->foreignId('country_id')->nullable()->constrained('countries');
+            $table->foreignId('city_id')->nullable()->constrained('cities');
+            $table->tinyInteger('type_id')->default(1)->comment('1=Contact, 2=Organization');
+            $table->tinyInteger('category_id')->nullable();
+            $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('people');
+        Schema::dropIfExists('contacts');
     }
 };
