@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             CurrencySeeder::class,
             CenterSeeder::class,
             ContactSeeder::class,
+            ContactCategorySeeder::class,
         ]);
     }
 }

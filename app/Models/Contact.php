@@ -6,7 +6,9 @@ use App\Helpers\FileHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Contact extends Model
 {
@@ -54,6 +56,16 @@ class Contact extends Model
     public function connections(): HasMany
     {
         return $this->hasMany(ContactConnection::class);
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(ContactCategory::class, 'contact_contact_category', 'contact_id', 'category_id');
+    }
+
+    public function salesTeam(): MorphOne
+    {
+        return $this->morphOne(SalesTeam::class, 'salesable');
     }
 
     /**

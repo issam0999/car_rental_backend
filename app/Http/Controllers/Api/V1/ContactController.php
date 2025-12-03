@@ -18,7 +18,7 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $query = Contact::where('center_id', $user->center_id)->with('connections', 'connections.connectionContact', 'connections.contact');
+        $query = Contact::where('center_id', $user->center_id)->with('categories', 'connections', 'connections.connectionContact', 'connections.contact');
 
         // Search
         if ($request->filled('q')) {
@@ -36,7 +36,7 @@ class ContactController extends Controller
 
         // type filter
         if ($request->filled('type')) {
-            $query->where('type_id', $request->type_id);
+            $query->where('type_id', $request->typeId);
         }
 
         // category filter
@@ -85,6 +85,8 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
+        $contact->load('categories', 'connections', 'connections.connectionContact', 'connections.contact', 'salesteam');
+
         return ApiResponse::success(new ContactResource($contact), 'Contact retrieved successfully');
     }
 
@@ -102,6 +104,17 @@ class ContactController extends Controller
 
         $contact->update($data);
 
+        /*  // sync categories
+         if (isset($data['category_ids'])) {
+             $contact->categories()->sync($data['category_ids']);
+         }
+
+         // sync sales team
+         if (isset($data['sales_team'])) {
+             $contact->salesTeam()->updateOrCreate([], ['center_id' => $request->user()->center_id,
+                 'percentage_onsales' => $data['sales_team']['percentage_onsales']]);
+         }
+ */
         return ApiResponse::success(new ContactResource($contact), 'Contact updated successfully');
     }
 

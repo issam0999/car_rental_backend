@@ -24,12 +24,13 @@ class ContactResource extends JsonResource
             'address' => $this->address,
             'type_id' => $this->type_id,
             'type' => $this->getType(),
-            'category' => 'Contact',
+            'categories' => ContactCategoryResource::collection($this->whenLoaded('categories')),
             'date_of_birth' => $this->date_of_birth,
             'country_id' => $this->country_id,
             'city_id' => $this->city_id,
-            'status' => $this->status === Contact::STATUS_ACTIVE,
-            'connections' => $this->whenLoaded('connections', fn () => ContactConnectionResource::collection($this->connections)), // $this->connections,
+            'status' => $this->status === Contact::STATUS_ACTIVE ? 'active' : 'inactive',
+            'connections' => ContactConnectionResource::collection($this->whenLoaded('connections')),
+            'salesTeam' => new SalesTeamResouce($this->whenLoaded('salesteam')),
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
     }
