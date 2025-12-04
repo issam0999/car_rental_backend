@@ -15,6 +15,7 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
     });
     Route::prefix('v1')->group(function () {
         Route::apiResource('users', UserController::class);
+        Route::get('contacts/parameters', [ContactController::class, 'parameters']);
         Route::apiResource('contacts', ContactController::class);
         Route::apiResource('centers', CenterController::class);
         Route::apiResource('industries', IndustryController::class);
@@ -22,4 +23,5 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
         Route::apiResource('countries', CountryController::class);
     });
 });
+
 require __DIR__.'/auth.php';

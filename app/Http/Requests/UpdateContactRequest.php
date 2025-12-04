@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ContactStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateContactRequest extends FormRequest
 {
@@ -29,9 +31,10 @@ class UpdateContactRequest extends FormRequest
             'date_of_birth' => 'nullable|date',
             'country_id' => 'nullable|integer',
             'city_id' => 'nullable|integer',
-            'center_id' => 'nullable|exists:centers,id',
-            'status' => 'nullable|boolean',
+            'status' => ['nullable', new Enum(ContactStatus::class)],
             'image' => 'nullable|string', // base64 string, optional
+            'address' => 'nullable|string|max:1000',
+            'sales_team_member' => 'nullable|boolean',
         ];
     }
 }

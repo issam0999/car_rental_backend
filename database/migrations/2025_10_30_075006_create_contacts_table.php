@@ -26,6 +26,9 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->tinyInteger('status')->default(1);
+            $table->integer('vat_number')->nullable();
+            $table->string('customer_ref_number')->nullable();
+            $table->string('tin_number')->nullable();
             $table->timestamps();
         });
     }

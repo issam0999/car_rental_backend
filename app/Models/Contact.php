@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ContactStatus;
 use App\Helpers\FileHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,6 +47,7 @@ class Contact extends Model
 
     protected $casts = [
         'date_of_birth' => 'date',
+        'status' => ContactStatus::class,
     ];
 
     public function center(): BelongsTo

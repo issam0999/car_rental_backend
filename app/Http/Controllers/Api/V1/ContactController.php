@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\ContactStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use App\Http\Resources\ContactCategoryResource;
 use App\Http\Resources\ContactResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Contact;
+use App\Models\ContactCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ContactController extends Controller
 {
@@ -30,8 +35,10 @@ class ContactController extends Controller
 
         // Status filter
         if ($request->filled('status')) {
-            $arr = ['active' => 1, 'suspended' => 0];
-            $query->where('status', $arr[$request->status]);
+            $status = $request->status;
+            if (in_array($status, ContactStatus::values())) {
+                $query->where('status', $status);
+            }
         }
 
         // type filter
@@ -41,7 +48,9 @@ class ContactController extends Controller
 
         // category filter
         if ($request->filled('categoryId')) {
-            $query->where('category_id', $request->categoryId);
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('category_id', $request->categoryId);
+            });
         }
 
         // Sorting
@@ -107,14 +116,16 @@ class ContactController extends Controller
         /*  // sync categories
          if (isset($data['category_ids'])) {
              $contact->categories()->sync($data['category_ids']);
-         }
+         }*/
+        Log::info(message: 'This is an informational message.');
 
-         // sync sales team
-         if (isset($data['sales_team'])) {
-             $contact->salesTeam()->updateOrCreate([], ['center_id' => $request->user()->center_id,
-                 'percentage_onsales' => $data['sales_team']['percentage_onsales']]);
-         }
- */
+        if (! empty($data['sales_team_member'])) {
+            $contact->salesTeam()->updateOrCreate([], ['center_id' => $contact->center_id, 'contact_id' => $contact->id]);
+        } else {
+            Log::info(var_dump($contact->salesTeam()));
+            $contact->salesTeam()->delete();
+        }
+
         return ApiResponse::success(new ContactResource($contact), 'Contact updated successfully');
     }
 
@@ -126,5 +137,21 @@ class ContactController extends Controller
         $contact->update(['status' => Contact::STATUS_DELETED]);
 
         return ApiResponse::success(null, 'Contact deleted successfully');
+    }
+
+    /**
+     * Retrieves contact parameters like Statuses and Categories.
+     */
+    public function parameters(): JsonResponse
+    {
+        $categories = ContactCategory::all();
+        $statuses = collect(ContactStatus::cases())->map(fn ($status) => [
+            'value' => $status->value,
+            'title' => $status->title(),
+            'color' => $status->color(),
+        ]);
+        $data = ['categories' => ContactCategoryResource::collection($categories), 'statuses' => $statuses];
+
+        return ApiResponse::success($data, 'Contact parameters retrieved successfully');
     }
 }
