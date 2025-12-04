@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ContactStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,12 +22,12 @@ class ContactFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->phoneNumber(),
             'address' => fake()->address(),
-            'type_id' => 1,
+            'type_id' => fake()->numberBetween(1, 2),
             'date_of_birth' => fake()->date(),
             'country_id' => 2,
             'city_id' => 1,
             'center_id' => 1,
-            'status' => 1,
+            'status' => ContactStatus::Active,
         ];
     }
 }

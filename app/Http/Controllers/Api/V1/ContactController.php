@@ -82,7 +82,7 @@ class ContactController extends Controller
     {
         $data = $request->validated();
 
-        $data['status'] = Contact::STATUS_ACTIVE;
+        $data['status'] = ContactStatus::Active;
 
         $result = Contact::create($data);
 
@@ -113,16 +113,13 @@ class ContactController extends Controller
 
         $contact->update($data);
 
-        /*  // sync categories
-         if (isset($data['category_ids'])) {
-             $contact->categories()->sync($data['category_ids']);
-         }*/
-        Log::info(message: 'This is an informational message.');
+        // sync categories
+        Log::info('Syncing categories: ', $data);
+        $contact->categories()->sync($data['categories']);
 
         if (! empty($data['sales_team_member'])) {
-            $contact->salesTeam()->updateOrCreate([], ['center_id' => $contact->center_id, 'contact_id' => $contact->id]);
+            $contact->salesTeam()->updateOrCreate([], ['center_id' => $contact->center_id]);
         } else {
-            Log::info(var_dump($contact->salesTeam()));
             $contact->salesTeam()->delete();
         }
 
@@ -134,7 +131,7 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        $contact->update(['status' => Contact::STATUS_DELETED]);
+        // $contact->update(['status' => Contact::STATUS_DELETED]);
 
         return ApiResponse::success(null, 'Contact deleted successfully');
     }

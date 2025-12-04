@@ -31,10 +31,12 @@ class UpdateContactRequest extends FormRequest
             'date_of_birth' => 'nullable|date',
             'country_id' => 'nullable|integer',
             'city_id' => 'nullable|integer',
-            'status' => ['nullable', new Enum(ContactStatus::class)],
+            'status_id' => ['nullable', new Enum(ContactStatus::class)],
             'image' => 'nullable|string', // base64 string, optional
             'address' => 'nullable|string|max:1000',
             'sales_team_member' => 'nullable|boolean',
+            'categories' => 'nullable|array',
+            'categories.*' => 'integer|exists:contact_categories,id',
         ];
     }
 }

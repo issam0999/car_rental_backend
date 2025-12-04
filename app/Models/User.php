@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\ContactStatus;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -86,8 +87,8 @@ class User extends Authenticatable implements MustVerifyEmail
             'name' => $data['name'],
             'email' => $data['email'],
             'center_id' => $data['center_id'] ?? 1,
-            'status' => Contact::STATUS_ACTIVE,
-            'type_id' => Contact::TYPE_CONTACT,
+            'status' => ContactStatus::Active,
+            'type_id' => Contact::TYPE_INDIVIDUAL,
         ]);
         $user = User::create([
             'email' => $data['email'],

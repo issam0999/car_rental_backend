@@ -25,7 +25,7 @@ return new class extends Migration
             $table->tinyInteger('category_id')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->tinyInteger('status')->default(1);
+            $table->string('status')->nullable();
             $table->integer('vat_number')->nullable();
             $table->string('customer_ref_number')->nullable();
             $table->string('tin_number')->nullable();

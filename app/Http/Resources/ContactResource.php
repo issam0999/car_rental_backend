@@ -31,6 +31,7 @@ class ContactResource extends JsonResource
             'type' => $this->getType(),
             'categories' => ContactCategoryResource::collection($this->whenLoaded('categories')),
             'date_of_birth' => $this->date_of_birth,
+            'status_id' => $this->status,
             'status' => [
                 'title' => $this->status->title(),
                 'color' => $this->status->color(),

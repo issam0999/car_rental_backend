@@ -15,10 +15,6 @@ class Contact extends Model
 {
     use HasFactory;
 
-    public const STATUS_ACTIVE = 1;
-
-    public const STATUS_DELETED = 0;
-
     public const CONTACT = 1;
 
     public const TYPE_INDIVIDUAL = 1;
