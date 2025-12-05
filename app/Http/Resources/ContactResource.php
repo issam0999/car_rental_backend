@@ -23,15 +23,23 @@ class ContactResource extends JsonResource
             'address' => $this->address,
             'country_id' => $this->country_id,
             'city_id' => $this->city_id,
+            'category_ids' => $this->whenLoaded('categories', fn () => $this->categories->pluck('id')->toArray()),
+            'type_id' => $this->type_id,
+            'industry_id' => $this->industry_id,
+            'channel_id' => $this->channel_id,
+            'date_of_birth' => $this->date_of_birth,
+            'status_id' => $this->status,
+            'trn_number' => $this->tin_number,
+            'vat_number' => $this->vat_number,
+            'customer_ref_number' => $this->customer_ref_number,
+            // display
             'country' => [
                 'name' => $this->country?->name,
                 'city' => $this->city?->name,
             ],
-            'type_id' => $this->type_id,
             'type' => $this->getType(),
             'categories' => ContactCategoryResource::collection($this->whenLoaded('categories')),
-            'date_of_birth' => $this->date_of_birth,
-            'status_id' => $this->status,
+
             'status' => [
                 'title' => $this->status->title(),
                 'color' => $this->status->color(),
@@ -39,9 +47,7 @@ class ContactResource extends JsonResource
             'connections' => ContactConnectionResource::collection($this->whenLoaded('connections')),
             'sales_team_member' => $this->whenLoaded('salesteam') ? true : false,
             'sales_team' => new SalesTeamResouce($this->whenLoaded('salesteam')),
-            'trn_number' => $this->tin_number,
-            'vat_number' => $this->vat_number,
-            'customer_ref_number' => $this->customer_ref_number,
+
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
     }

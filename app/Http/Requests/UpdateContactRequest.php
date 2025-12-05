@@ -35,8 +35,8 @@ class UpdateContactRequest extends FormRequest
             'image' => 'nullable|string', // base64 string, optional
             'address' => 'nullable|string|max:1000',
             'sales_team_member' => 'nullable|boolean',
-            'categories' => 'nullable|array',
-            'categories.*' => 'integer|exists:contact_categories,id',
+            'category_ids' => 'nullable|array',
+            'category.*' => 'integer|exists:contact_categories,id',
         ];
     }
 }

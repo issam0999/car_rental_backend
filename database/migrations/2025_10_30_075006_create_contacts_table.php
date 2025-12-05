@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('city_id')->nullable()->constrained('cities');
             $table->tinyInteger('type_id')->default(1)->comment('1=Contact, 2=Organization');
             $table->tinyInteger('category_id')->nullable();
+            $table->tinyInteger('industry_id')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->string('status')->nullable();
