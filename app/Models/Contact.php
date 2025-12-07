@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ContactStatus;
 use App\Helpers\FileHelper;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,6 +46,13 @@ class Contact extends Model
         'date_of_birth' => 'date',
         'status' => ContactStatus::class,
     ];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('center', function (Builder $builder) {
+            $builder->where('center_id', auth()->user()->center_id);
+        });
+    }
 
     public function center(): BelongsTo
     {

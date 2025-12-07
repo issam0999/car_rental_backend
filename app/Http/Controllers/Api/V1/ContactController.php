@@ -7,11 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\ContactCategoryResource;
+use App\Http\Resources\ContactConnectionResource;
 use App\Http\Resources\ContactResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Contact;
 use App\Models\ContactCategory;
+use App\Models\ContactConnection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ContactController extends Controller
@@ -134,6 +137,14 @@ class ContactController extends Controller
         return ApiResponse::success(null, 'Contact deleted successfully');
     }
 
+    public function list(): Collection
+    {
+        return Contact::query()
+            ->select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
+    }
+
     /**
      * Retrieves contact parameters like Statuses and Categories.
      */
@@ -161,5 +172,32 @@ class ContactController extends Controller
         ];
 
         return ApiResponse::success($data, 'Contact parameters retrieved successfully');
+    }
+
+    public function addConnections(Contact $contact, Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'connections' => 'required|array',
+            'connections.*.connection_contact_id' => 'required|exists:contacts,id',
+            'connections.*.relation' => 'nullable|string',
+            'connections.*.primary' => 'boolean',
+        ]);
+
+        foreach ($validated['connections'] as $conn) {
+
+            ContactConnection::firstOrCreate(
+                [
+                    'contact_id' => $contact->id,
+                    'connection_contact_id' => $conn['connection_contact_id'],
+                ],
+                [
+                    'relation' => $conn['relation'],
+                    'is_primary' => $conn['primary'],
+                ]
+            );
+        }
+        $connections = ContactConnectionResource::collection($contact->connections()->get());
+
+        return ApiResponse::success($connections, 'Connections added successfully');
     }
 }

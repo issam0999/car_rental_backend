@@ -18,9 +18,10 @@ class ContactConnectionResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'connection_contact_id' => $this->connection_contact_id,
             'name' => $connectionContact->name,
             'avatar' => when($connectionContact->image, $connectionContact->getImageUrl($connectionContact->image)),
-            'is_primary' => $this->is_primary,
+            'primary' => $this->is_primary,
         ];
     }
 }
