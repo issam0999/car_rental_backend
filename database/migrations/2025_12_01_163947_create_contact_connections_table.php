@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('contact_id')->constrained('contacts')->cascadeOnDelete();
             $table->foreignId('connection_contact_id')->constrained('contacts')->cascadeOnDelete();
+            $table->string('relation')->nullable();
             $table->boolean('is_primary')->default(false);
             $table->timestamps();
+
+            $table->index('contact_id');
         });
     }
 

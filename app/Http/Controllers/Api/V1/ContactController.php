@@ -178,13 +178,17 @@ class ContactController extends Controller
     {
         $validated = $request->validate([
             'connections' => 'required|array',
-            'connections.*.connection_contact_id' => 'required|exists:contacts,id',
-            'connections.*.relation' => 'nullable|string',
+            'connections.*.connection_contact_id' => 'required',
+            'connections.*.relation' => 'nullable|string|max:255',
             'connections.*.primary' => 'boolean',
         ]);
+        $isPrimary = false;
 
         foreach ($validated['connections'] as $conn) {
-
+            if ($conn['primary'] && ! $isPrimary) {
+                ContactConnection::where('contact_id', $contact->id)->update(['is_primary' => false]);
+                $isPrimary = true;
+            }
             ContactConnection::firstOrCreate(
                 [
                     'contact_id' => $contact->id,
@@ -192,12 +196,19 @@ class ContactController extends Controller
                 ],
                 [
                     'relation' => $conn['relation'],
-                    'is_primary' => $conn['primary'],
+                    'is_primary' => $isPrimary,
                 ]
             );
         }
         $connections = ContactConnectionResource::collection($contact->connections()->get());
 
         return ApiResponse::success($connections, 'Connections added successfully');
+    }
+
+    public function deleteConnection(ContactConnection $connection, Request $request): JsonResponse
+    {
+        $connection->delete();
+
+        return ApiResponse::success(null, 'Connection deleted successfully');
     }
 }

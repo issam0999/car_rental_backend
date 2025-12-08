@@ -14,6 +14,7 @@ class ContactConnection extends Model
         'contact_id',
         'connection_contact_id',
         'is_primary',
+        'relation',
     ];
 
     public $casts = [
