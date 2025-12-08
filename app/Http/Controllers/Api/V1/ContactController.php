@@ -205,6 +205,18 @@ class ContactController extends Controller
         return ApiResponse::success($connections, 'Connections added successfully');
     }
 
+    public function updateConnection(ContactConnection $connection, Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'relation' => 'nullable|string|max:255',
+            'primary' => 'boolean',
+        ]);
+
+        $connection->update($validated);
+
+        return ApiResponse::success(new ContactConnectionResource($connection), 'Connection updated successfully');
+    }
+
     public function deleteConnection(ContactConnection $connection, Request $request): JsonResponse
     {
         $connection->delete();

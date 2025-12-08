@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
         Route::get('contacts/parameters', [ContactController::class, 'parameters']);
         Route::get('/contacts/list', [ContactController::class, 'list']);
         Route::post('/contacts/{contact}/add-connections', [ContactController::class, 'addConnections']);
+        Route::post('/contacts/update-connection/{connection}', [ContactController::class, 'updateConnection']);
         Route::post('/contacts/delete-connection/{connection}', [ContactController::class, 'deleteConnection']);
         Route::apiResource('contacts', ContactController::class);
         Route::apiResource('centers', CenterController::class);
