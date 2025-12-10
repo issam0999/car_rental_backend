@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreDocumentRequest;
 use App\Http\Resources\DocumentResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Document;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DocumentController extends Controller
 {
@@ -70,46 +72,57 @@ class DocumentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDocumentRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
+            Log::info($data);
 
-        $file = $data['file'];
+            $file = $request->file('file');
+            Log::info(message: 'file '.$file);
+            if ($file) {
+                Log::info('inside');
+                $folder = strtolower(class_basename($data['documentable_type']));
 
-        if ($file) {
-            $folder = strtolower(class_basename($data['documentable_type']));
+                // Store file
+                $path = $file->store("documents/{$folder}", 'public');
 
-            // Store file
-            $path = $file->store("documents/{$folder}", 'public');
+                // Create document
+                $document = Document::create([
+                    'documentable_type' => $data['documentable_type'],
+                    'documentable_id' => $data['documentable_id'],
 
-            // Create document
-            $document = Document::create([
-                'documentable_type' => $data['documentable_type'],
-                'documentable_id' => $data['documentable_id'],
+                    'name' => $data['name'] ?? $file->getClientOriginalName(),
+                    'number' => $data['number'],
+                    'type_id' => $data['type_id'],
+                    'issue_date' => $data['issue_date'],
+                    'expiry_date' => $data['expiry_date'],
+                    'path' => $path,
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+            } else {
+                $document = Document::create([
+                    'documentable_type' => $data['documentable_type'],
+                    'documentable_id' => $data['documentable_id'],
 
-                'name' => $data['name'] ?? $file->getClientOriginalName(),
-                'number' => $data['number'],
-                'issue_date' => $data['issue_date'],
-                'expiry_date' => $data['expiry_date'],
-                'path' => $path,
-                'mime_type' => $file->getMimeType(),
-                'size' => $file->getSize(),
-            ]);
-        } else {
-            $document = Document::create([
-                'documentable_type' => $data['documentable_type'],
-                'documentable_id' => $data['documentable_id'],
+                    'type_id' => $data['type_id'],
 
-                'name' => $data['name'] ?? basename($data['url']),
-                'number' => $data['number'],
-                'issue_date' => $data['issue_date'],
-                'expiry_date' => $data['expiry_date'],
-                'external_link' => $data['url'],
-                'size' => 0,
-            ]);
+                    'name' => $data['name'] ?? basename($data['url']),
+                    'number' => $data['number'],
+                    'issue_date' => $data['issue_date'],
+                    'expiry_date' => $data['expiry_date'],
+                    'external_link' => $data['url'],
+                    'size' => 0,
+                ]);
+            }
+
+            return ApiResponse::success($document, 'Document stored successfully.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return ApiResponse::error($e->getMessage());
         }
-
-        return ApiResponse::success($document, 'Document stored successfully.');
     }
 
     /**

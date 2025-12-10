@@ -27,7 +27,6 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
         Route::apiResource('center-packages', CenterPackageController::class);
         Route::apiResource('countries', CountryController::class);
         Route::get('documents/parameters', [documentController::class, 'parameters']);
-
         Route::apiResource('documents', DocumentController::class);
     });
 });

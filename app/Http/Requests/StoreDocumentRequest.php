@@ -23,9 +23,9 @@ class StoreDocumentRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'file' => 'required|file|max:2048,mimetypes:application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'file' => 'required|file|max:2048',
             'type_id' => 'required|integer',
-            'number' => 'required|string|max:255',
+            'number' => 'nullable|string|max:255',
             'expiry_date' => 'nullable|date',
             'issue_date' => 'nullable|date',
             'documentable_type' => 'required|string', // e.g. App\Models\Contact
