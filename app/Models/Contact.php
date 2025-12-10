@@ -74,6 +74,11 @@ class Contact extends Model
         return $this->morphOne(SalesTeam::class, 'salesable');
     }
 
+    public function documents()
+    {
+        return $this->morphMany(Document::class, 'documentable');
+    }
+
     /**
      * Get the base path for images.
      * Can be reused anywhere.

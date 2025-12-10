@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\CenterController;
 use App\Http\Controllers\Api\V1\CenterPackageController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\CountryController;
+use App\Http\Controllers\Api\v1\DocumentController;
 use App\Http\Controllers\Api\V1\IndustryController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Request;
@@ -25,6 +26,9 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
         Route::apiResource('industries', IndustryController::class);
         Route::apiResource('center-packages', CenterPackageController::class);
         Route::apiResource('countries', CountryController::class);
+        Route::get('documents/parameters', [documentController::class, 'parameters']);
+
+        Route::apiResource('documents', DocumentController::class);
     });
 });
 
