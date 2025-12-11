@@ -14,11 +14,6 @@ class Document extends Model
         'size', 'documentable_type', 'documentable_id', 'external_link',
     ];
 
-    protected $casts = [
-        'issue_date' => 'date',
-        'expiry_date' => 'date',
-    ];
-
     public function documentable(): MorphTo
     {
         return $this->morphTo();

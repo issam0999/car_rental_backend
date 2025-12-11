@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('issue_date')->nullable();
             $table->date('expiry_date')->nullable();
             $table->string('external_link', 500)->nullable();
-            $table->string('path');
+            $table->string('path')->nullable();
             $table->string('mime_type', 100)->nullable();
             $table->unsignedBigInteger('size')->default(0);
 

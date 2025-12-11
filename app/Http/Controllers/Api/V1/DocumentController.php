@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDocumentRequest;
+use App\Http\Requests\UpdateDocumentRequest;
 use App\Http\Resources\DocumentResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Document;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
@@ -76,16 +79,11 @@ class DocumentController extends Controller
     {
         try {
             $data = $request->validated();
-            Log::info($data);
 
             $file = $request->file('file');
-            Log::info(message: 'file '.$file);
-            if ($file) {
-                Log::info('inside');
-                $folder = strtolower(class_basename($data['documentable_type']));
 
-                // Store file
-                $path = $file->store("documents/{$folder}", 'public');
+            if ($file) {
+                $path = FileHelper::storeFile($data['documentable_type'], $file);
 
                 // Create document
                 $document = Document::create([
@@ -112,7 +110,7 @@ class DocumentController extends Controller
                     'number' => $data['number'],
                     'issue_date' => $data['issue_date'],
                     'expiry_date' => $data['expiry_date'],
-                    'external_link' => $data['url'],
+                    'external_link' => $data['external_link'],
                     'size' => 0,
                 ]);
             }
@@ -136,9 +134,49 @@ class DocumentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(UpdateDocumentRequest $request, string $id)
     {
-        //
+        try {
+            $data = $request->validated();
+            $document = Document::findOrFail($id);
+
+            $file = $request->file('file');
+            $hasNewFile = (bool) $file;
+            $hasExternalLink = ! empty($data['external_link']);
+
+            // Delete old file ONLY if:
+            // 1) A new file is uploaded OR
+            // 2) External link is provided (switching mode)
+            if ($document->path && ($hasNewFile || $hasExternalLink)) {
+                Storage::delete($document->path);
+            }
+
+            // Handle file upload
+            if ($hasNewFile) {
+                $path = FileHelper::storeFile($data['documentable_type'], $file);
+
+                $data['path'] = $path;
+                $data['mime_type'] = $file->getMimeType();
+                $data['size'] = $file->getSize();
+                $data['external_link'] = null; // remove old link
+            }
+
+            // Handle external link
+            if (! $hasNewFile && $hasExternalLink) {
+                $data['path'] = null;
+                $data['mime_type'] = null;
+                $data['size'] = 0;
+            }
+
+            $document->update($data);
+
+            return ApiResponse::success($document, 'Document updated successfully.');
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return ApiResponse::error($e->getMessage());
+        }
     }
 
     /**

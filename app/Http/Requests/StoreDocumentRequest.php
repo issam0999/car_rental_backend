@@ -23,14 +23,14 @@ class StoreDocumentRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'file' => 'required|file|max:2048',
             'type_id' => 'required|integer',
             'number' => 'nullable|string|max:255',
             'expiry_date' => 'nullable|date',
             'issue_date' => 'nullable|date',
             'documentable_type' => 'required|string', // e.g. App\Models\Contact
             'documentable_id' => 'required|integer',
-            'external_link' => 'nullable|string|max:500',
+            'file' => 'required_without:external_link|nullable|file|max:2048',
+            'external_link' => 'required_without:file|nullable|string|max:500',
 
         ];
     }
