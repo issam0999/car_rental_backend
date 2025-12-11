@@ -132,13 +132,14 @@ class DocumentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified resource in storage.
      */
-    public function edit(UpdateDocumentRequest $request, string $id)
+    public function update(UpdateDocumentRequest $request, Document $document)
     {
+        Log::info('update');
+        Log::info($request->all());
         try {
             $data = $request->validated();
-            $document = Document::findOrFail($id);
 
             $file = $request->file('file');
             $hasNewFile = (bool) $file;
@@ -177,14 +178,6 @@ class DocumentController extends Controller
 
             return ApiResponse::error($e->getMessage());
         }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**

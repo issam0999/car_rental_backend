@@ -27,10 +27,8 @@ class UpdateDocumentRequest extends FormRequest
             'number' => 'nullable|string|max:255',
             'expiry_date' => 'nullable|date',
             'issue_date' => 'nullable|date',
-            'documentable_type' => 'required|string', // e.g. App\Models\Contact
-            'documentable_id' => 'required|integer',
-            'file' => 'required_without:external_link|nullable|file|max:2048',
-            'external_link' => 'required_without:file|nullable|string|max:500',
+            'file' => 'nullable|file|max:2048',
+            'external_link' => 'nullable|string|max:500',
 
         ];
     }
