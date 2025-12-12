@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('type_id');
             $table->date('issue_date')->nullable();
             $table->date('expiry_date')->nullable();
+            $table->tinyInteger('reminder')->default(0);
+            $table->string('note', 500)->nullable();
             $table->string('external_link', 500)->nullable();
             $table->string('path')->nullable();
             $table->string('mime_type', 100)->nullable();

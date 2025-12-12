@@ -27,10 +27,12 @@ class StoreDocumentRequest extends FormRequest
             'number' => 'nullable|string|max:255',
             'expiry_date' => 'nullable|date',
             'issue_date' => 'nullable|date',
+            'reminder' => 'nullable|boolean',
             'documentable_type' => 'required|string', // e.g. App\Models\Contact
             'documentable_id' => 'required|integer',
             'file' => 'nullable|file|max:2048',
             'external_link' => 'nullable|string|max:500',
+            'note' => 'nullable|string|max:500',
 
         ];
     }

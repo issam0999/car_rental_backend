@@ -84,38 +84,14 @@ class DocumentController extends Controller
 
             if ($file) {
                 $path = FileHelper::storeFile($data['documentable_type'], $file);
-
-                // Create document
-                $document = Document::create([
-                    'documentable_type' => $data['documentable_type'],
-                    'documentable_id' => $data['documentable_id'],
-
-                    'name' => $data['name'] ?? $file->getClientOriginalName(),
-                    'number' => $data['number'],
-                    'type_id' => $data['type_id'],
-                    'issue_date' => $data['issue_date'],
-                    'expiry_date' => $data['expiry_date'],
-                    'path' => $path,
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize(),
-                ]);
-            } else {
-                $document = Document::create([
-                    'documentable_type' => $data['documentable_type'],
-                    'documentable_id' => $data['documentable_id'],
-
-                    'type_id' => $data['type_id'],
-
-                    'name' => $data['name'] ?? basename($data['url']),
-                    'number' => $data['number'],
-                    'issue_date' => $data['issue_date'],
-                    'expiry_date' => $data['expiry_date'],
-                    'external_link' => $data['external_link'],
-                    'size' => 0,
-                ]);
+                $data['path'] = $path;
+                $data['mime_type'] = $file->getMimeType();
+                $data['size'] = $file->getSize();
             }
+            // Create document
+            $document = Document::create($data);
 
-            return ApiResponse::success($document, 'Document stored successfully.');
+            return ApiResponse::success(new DocumentResource($document), 'Document stored successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
@@ -136,8 +112,6 @@ class DocumentController extends Controller
      */
     public function update(UpdateDocumentRequest $request, Document $document)
     {
-        Log::info('update');
-        Log::info($request->all());
         try {
             $data = $request->validated();
 
@@ -183,9 +157,14 @@ class DocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Document $document)
     {
-        //
+        FileHelper::deleteFile($document->path);
+        $document->delete();
+
+        return response()->json([
+            'message' => 'Document deleted successfully',
+        ]);
     }
 
     public function parameters(): JsonResponse
@@ -196,7 +175,7 @@ class DocumentController extends Controller
             ['value' => 3, 'title' => 'ID Card']]; // Future gets from centerparams crm_industries
 
         $data = [
-            'statuses' => [],
+            'statuses' => Document::STATUS_ARR,
             'types' => $types,
         ];
 

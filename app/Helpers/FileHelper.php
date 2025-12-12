@@ -40,4 +40,11 @@ class FileHelper
 
         return $path;
     }
+
+    public static function deleteFile($path)
+    {
+        if ($path && Storage::exists($path)) {
+            Storage::delete($path);
+        }
+    }
 }
