@@ -11,10 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contact extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public const CONTACT = 1;
 
@@ -28,18 +30,10 @@ class Contact extends Model
     ];
 
     protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'type_id',
-        'date_of_birth',
-        'country_id',
-        'center_id',
-        'status',
-        'address',
-        'city_id',
-        'image',
-        'avatar',
+        'name', 'email', 'phone', 'type_id', 'date_of_birth', 'country_id', 'language_id',
+        'center_id', 'status', 'address', 'city_id', 'image', 'avatar', 'website',
+        'vat_number', 'tin_number', 'customer_ref_number', 'description', 'industry_id', 'channel_id',
+
     ];
 
     protected $casts = [
@@ -57,6 +51,16 @@ class Contact extends Model
     public function center(): BelongsTo
     {
         return $this->belongsTo(Center::class);
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 
     public function connections(): HasMany
@@ -77,6 +81,11 @@ class Contact extends Model
     public function documents()
     {
         return $this->morphMany(Document::class, 'documentable');
+    }
+
+    public function language()
+    {
+        return $this->belongsTo(CenterParam::class, 'language_id');
     }
 
     /**

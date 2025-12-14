@@ -27,10 +27,16 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->string('status')->nullable();
+            $table->string('website')->nullable();
             $table->integer('vat_number')->nullable();
             $table->string('customer_ref_number')->nullable();
             $table->string('tin_number')->nullable();
+            $table->integer('language_id')->nullable();
+            $table->tinyInteger('channel_id')->nullable();
             $table->timestamps();
+
+            $table->softDeletes();
+
         });
     }
 

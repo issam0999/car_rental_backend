@@ -32,6 +32,8 @@ class ContactResource extends JsonResource
             'trn_number' => $this->tin_number,
             'vat_number' => $this->vat_number,
             'customer_ref_number' => $this->customer_ref_number,
+            'website' => $this->website,
+            'language_id' => $this->language_id,
             // display
             'country' => [
                 'name' => $this->country?->name,

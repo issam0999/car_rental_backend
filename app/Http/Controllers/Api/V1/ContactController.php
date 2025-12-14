@@ -15,6 +15,7 @@ use App\Models\ContactCategory;
 use App\Models\ContactConnection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ContactController extends Controller
@@ -82,7 +83,18 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
+
         $data = $request->validated();
+
+        if (! empty($data['email'] || ! empty($data['phone'])) &&
+        empty($request->boolean('force_create')) &&
+        Contact::where('email', $data['email'])->orWhere('phone', $data['phone'])->exists()
+        ) {
+            return response()->json([
+                'message' => 'Email or phone already exists. Do you want to continue?',
+                'code' => 'EMAIL_EXISTS',
+            ], 409);
+        }
 
         $data['status'] = ContactStatus::Active;
 
@@ -106,25 +118,32 @@ class ContactController extends Controller
      */
     public function update(UpdateContactRequest $request, Contact $contact)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
+            Log::info($data);
+            if (isset($data['image'])) {
+                $relativePath = $contact->saveImage($data['image']);
+                $data['image'] = $relativePath;
+            }
 
-        if (isset($data['image'])) {
-            $relativePath = $contact->saveImage($data['image']);
-            $data['image'] = $relativePath;
+            $contact->update($data);
+
+            // sync categories
+            $contact->categories()->sync($data['category_ids'] ?? []);
+
+            if (! empty($data['sales_team_member'])) {
+                $contact->salesTeam()->updateOrCreate([], ['center_id' => $contact->center_id]);
+            } else {
+                $contact->salesTeam()->delete();
+            }
+            $contact->load('categories');
+
+            return ApiResponse::success(new ContactResource($contact), 'Contact updated successfully');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return ApiResponse::error($e->getMessage());
         }
-
-        $contact->update($data);
-
-        // sync categories
-        $contact->categories()->sync($data['category_ids'] ?? []);
-
-        if (! empty($data['sales_team_member'])) {
-            $contact->salesTeam()->updateOrCreate([], ['center_id' => $contact->center_id]);
-        } else {
-            $contact->salesTeam()->delete();
-        }
-
-        return ApiResponse::success(new ContactResource($contact), 'Contact updated successfully');
     }
 
     /**
@@ -132,7 +151,7 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        // $contact->update(['status' => Contact::STATUS_DELETED]);
+        $contact->delete();
 
         return ApiResponse::success(null, 'Contact deleted successfully');
     }
@@ -165,10 +184,17 @@ class ContactController extends Controller
             ['value' => 1, 'title' => 'Social Media'],
             ['value' => 2, 'title' => 'Referral'],
             ['value' => 3, 'title' => 'Direct Sales']]; // Future gets from centerparams crm_channels
+
+        $languages = [
+            ['value' => 1, 'title' => 'English'],
+            ['value' => 2, 'title' => 'Arabic'],
+            ['value' => 3, 'title' => 'French']]; // Future gets from centerparams crm_channels
+
         $data = ['categories' => ContactCategoryResource::collection($categories),
             'statuses' => $statuses,
             'industries' => $industries,
             'channels' => $channels,
+            'languages' => $languages,
         ];
 
         return ApiResponse::success($data, 'Contact parameters retrieved successfully');
