@@ -20,6 +20,7 @@ return new class extends Migration
             $table->tinyInteger('required')->default(0);
             $table->string('type')->default('text');
             $table->integer('order')->nullable();
+            $table->integer('subscription')->nullable();
             $table->string('group')->nullable();
             $table->text('description')->nullable();
             $table->tinyInteger('status')->default(1);

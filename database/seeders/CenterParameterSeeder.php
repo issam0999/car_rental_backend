@@ -31,7 +31,7 @@ class CenterParameterSeeder extends Seeder
             ['center_id' => 1, 'key' => 'facebook', 'name' => 'Facebook', 'value' => null, 'type' => 'text', 'group' => 'links', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'instagram', 'name' => 'Instagram', 'value' => null, 'type' => 'text', 'group' => 'links', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'linkedin', 'name' => 'Linkedin', 'value' => null, 'type' => 'text', 'group' => 'links', 'required' => 0, 'description' => null, 'subscription' => 0],
-            ['center_id' => 1, 'key' => 'youTube', 'name' => 'YouTube', 'value' => null, 'type' => 'text', 'group' => 'links', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'youtube', 'name' => 'YouTube', 'value' => null, 'type' => 'text', 'group' => 'links', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'twitter', 'name' => 'X', 'value' => null, 'type' => 'text', 'group' => 'links', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'currency', 'name' => 'Currency', 'value' => null, 'type' => 'select', 'group' => 'invoicing', 'required' => 1, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'invoice_seq_format', 'name' => 'Refence Format', 'value' => null, 'type' => 'text', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('order')->default(1);
             $table->timestamps();
 
-            $table->unique(['center_parameter_id', 'name']);
+            $table->unique(['center_parameter_id', 'value']);
         });
     }
 
