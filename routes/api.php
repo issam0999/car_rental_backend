@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\CenterController;
 use App\Http\Controllers\Api\V1\CenterPackageController;
+use App\Http\Controllers\Api\V1\CenterParameterController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\CountryController;
 use App\Http\Controllers\Api\v1\DocumentController;
@@ -28,6 +29,7 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
         Route::apiResource('countries', CountryController::class);
         Route::get('documents/parameters', [documentController::class, 'parameters']);
         Route::apiResource('documents', DocumentController::class);
+        Route::apiResource('parameters', CenterParameterController::class);
     });
 });
 
