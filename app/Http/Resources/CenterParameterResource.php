@@ -17,7 +17,7 @@ class CenterParameterResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'value' => $this->type === 'multiselect' ? $this->values : $this->value,
+            'value' => $this->type === 'multiselect' ? CenterParameterValueResource::collection($this->values) : $this->value,
             'hint' => $this->description,
             'required' => (bool) $this->required,
             'type' => $this->type,

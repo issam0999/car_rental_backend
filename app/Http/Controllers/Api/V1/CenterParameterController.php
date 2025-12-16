@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\Common;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CenterParameterResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\CenterParameter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CenterParameterController extends Controller
 {
@@ -15,18 +17,25 @@ class CenterParameterController extends Controller
      */
     public function index(Request $request)
     {
-        $params = [];
+        $centerId = Common::centerId();
+        $cacheKey = "center_parameters_center_{$centerId}";
 
-        $groups = CenterParameter::with('values')->get()->groupBy('group');
+        $params = Cache::rememberForever($cacheKey, function () use ($request) {
 
-        foreach ($groups as $groupName => $items) {
-            $params[$groupName] = [];
+            $result = [];
+            $groups = CenterParameter::with('values')->get()->groupBy('group');
 
-            foreach ($items as $item) {
-                $params[$groupName][$item->key] = (new CenterParameterResource($item))
-                    ->resolve($request);
+            foreach ($groups as $groupName => $items) {
+                $result[$groupName] = [];
+
+                foreach ($items as $item) {
+                    $result[$groupName][$item->key] = (new CenterParameterResource($item))
+                        ->resolve($request);
+                }
             }
-        }
+
+            return $result;
+        });
 
         return ApiResponse::success($params);
     }

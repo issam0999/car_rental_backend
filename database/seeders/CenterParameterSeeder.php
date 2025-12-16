@@ -36,12 +36,12 @@ class CenterParameterSeeder extends Seeder
             ['center_id' => 1, 'key' => 'currency', 'name' => 'Currency', 'value' => null, 'type' => 'select', 'group' => 'invoicing', 'required' => 1, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'invoice_seq_format', 'name' => 'Refence Format', 'value' => null, 'type' => 'text', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'invoice_seq_contains_year', 'name' => 'Sequence Contains the year?', 'value' => 1, 'type' => 'boolean', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
-            ['center_id' => 1, 'key' => 'invoice_seq_starts', 'name' => 'Invoice Sequence Starts', 'value' => '1', 'type' => 'number', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
-            ['center_id' => 1, 'key' => 'proforma_seq_starts', 'name' => 'Proforma Sequence Starts', 'value' => '1', 'type' => 'number', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
-            ['center_id' => 1, 'key' => 'quotation_seq_starts', 'name' => 'Quotation Sequence Starts', 'value' => '1', 'type' => 'number', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
-            ['center_id' => 1, 'key' => 'invoice_seq_skip_deleted', 'name' => 'Skip Deleted', 'value' => '0', 'type' => 'boolean', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 1],
-            ['center_id' => 1, 'key' => 'invoice_payment_remind', 'name' => 'Payment Reminders', 'value' => '0', 'type' => 'boolean', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 2],
-            ['center_id' => 1, 'key' => 'invoice_payment_remind_after', 'name' => 'Payment Reminders After', 'value' => '10', 'type' => 'number', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 2],
+            ['center_id' => 1, 'key' => 'invoice_seq_starts', 'name' => 'Invoice Sequence Starts', 'value' => '001', 'type' => 'number', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'proforma_seq_starts', 'name' => 'Proforma Sequence Starts', 'value' => '001', 'type' => 'number', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'quotation_seq_starts', 'name' => 'Quotation Sequence Starts', 'value' => '001', 'type' => 'number', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'invoice_seq_skip_deleted', 'name' => 'Skip Deleted', 'value' => '0', 'type' => 'boolean', 'group' => 'invoicing', 'required' => 0, 'description' => 'System skips deleted references or reuse them', 'subscription' => 1],
+            ['center_id' => 1, 'key' => 'invoice_payment_remind', 'name' => 'Payment Reminders', 'value' => '0', 'type' => 'boolean', 'group' => 'invoicing', 'required' => 0, 'description' => 'System will notify deal creator/collaborator If invoice is not paid after X number of days', 'subscription' => 2],
+            ['center_id' => 1, 'key' => 'invoice_payment_remind_after', 'name' => 'Payment Reminders After', 'value' => '10', 'type' => 'number', 'group' => 'invoicing', 'required' => 0, 'description' => 'Number of Days', 'subscription' => 2],
             ['center_id' => 1, 'key' => 'show_invoice_note', 'name' => 'Show Invoice Note', 'value' => 1, 'type' => 'boolean', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'invoice_note_text', 'name' => 'Invoice Note', 'value' => 'Created using Squarely Business OS.', 'type' => 'text', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'show_quotation_note', 'name' => 'Show Quotation Note', 'value' => 1, 'type' => 'boolean', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
@@ -80,6 +80,12 @@ class CenterParameterSeeder extends Seeder
             ['center_id' => 1, 'key' => 'job_stages', 'name' => 'Job Stages', 'value' => null, 'type' => 'multiselect', 'group' => 'sales', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'doc_types', 'name' => 'Document Types', 'value' => null, 'type' => 'multiselect', 'group' => 'document', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'doc_categories', 'name' => 'Document Categories', 'value' => null, 'type' => 'multiselect', 'group' => 'document', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'currencies', 'name' => 'Currencies', 'value' => null, 'type' => 'multiselect', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'expenses_accounts', 'name' => 'Expenses', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'cash_accounts', 'name' => 'Cash', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'banks_accounts', 'name' => 'Banks', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'payment_gateways_accounts', 'name' => 'Payment Gateways', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'assets_accounts', 'name' => 'Assets', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
         ]);
 
         $multiSelect = CenterParameter::where('type', 'multiselect')->select('id', 'key')->get()->keyBy('key')->toArray();
@@ -96,6 +102,13 @@ class CenterParameterSeeder extends Seeder
             'job_stages' => ['PRPSL', 'In Review', 'Project | In design', 'RFI', 'Construction Supervision'],
             'doc_types' => ['Contract', 'Passport', 'Visa', 'ID Card', 'Other'],
             'doc_categories' => ['Legal', 'Finance', 'HR', 'Sales', 'Jobs'],
+            'currencies' => ['USD', 'AED', 'EUR', 'LBP'],
+            'expenses_accounts' => ['General Expense'],
+            'cash_accounts' => ['Cash '],
+            'banks_accounts' => ['Bank'],
+            'payment_gateways_accounts' => ['Payment Gateway'],
+            'assets_accounts' => ['Assets'],
+
         ];
         foreach ($array as $key => $value) {
             if (! isset($multiSelect[$key])) {
