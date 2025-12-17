@@ -16,7 +16,7 @@ class CenterParameterValueResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'value' => $this->value,
+            'text' => $this->value,
         ];
     }
 }

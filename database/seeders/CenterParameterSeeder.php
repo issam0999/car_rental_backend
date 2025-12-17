@@ -15,12 +15,12 @@ class CenterParameterSeeder extends Seeder
     public function run(): void
     {
         DB::table('center_parameters')->insert([
-            ['center_id' => 1, 'key' => 'vat', 'name' => 'VAT', 'value' => 1, 'type' => 'boolean', 'group' => 'vat', 'required' => 1, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'vat', 'name' => 'VAT Enabled?', 'value' => 1, 'type' => 'boolean', 'group' => 'vat', 'required' => 1, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'vat_percentage', 'name' => 'VAT %', 'value' => 1, 'type' => 'number', 'group' => 'vat', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'vat_reg_number', 'name' => 'VAT Reg No', 'value' => null, 'type' => 'text', 'group' => 'vat', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'trn_number', 'name' => 'TRN No', 'value' => null, 'type' => 'text', 'group' => 'vat', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'trade_license', 'name' => 'Trade License', 'value' => null, 'type' => 'text', 'group' => 'vat', 'required' => 0, 'description' => null, 'subscription' => 0],
-            ['center_id' => 1, 'key' => 'show_bank_details', 'name' => 'Show Bank Details', 'value' => 1, 'type' => 'boolean', 'group' => 'bank', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'show_bank_details', 'name' => 'Show Bank Info on Invoice', 'value' => 1, 'type' => 'boolean', 'group' => 'bank', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'bank_name', 'name' => 'Bank Name', 'value' => null, 'type' => 'text', 'group' => 'bank', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'account_name', 'name' => 'Account Name', 'value' => null, 'type' => 'text', 'group' => 'bank', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'account_number', 'name' => 'Account Number', 'value' => null, 'type' => 'text', 'group' => 'bank', 'required' => 0, 'description' => null, 'subscription' => 0],
@@ -48,6 +48,7 @@ class CenterParameterSeeder extends Seeder
             ['center_id' => 1, 'key' => 'quotation_note_text', 'name' => 'Quotation Note', 'value' => 'Created using Squarely Business OS.', 'type' => 'text', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'show_proforma_note', 'name' => 'Show Proforma Note', 'value' => 1, 'type' => 'boolean', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'proforma_note_text', 'name' => 'Proforma Note', 'value' => 'Created using Squarely Business OS.', 'type' => 'text', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'departments', 'name' => 'Departments', 'value' => null, 'type' => 'multiselect', 'group' => 'hr', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'leave_policy', 'name' => 'Leave Policy', 'value' => '1', 'type' => 'select', 'group' => 'hr', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'leave_count_basis', 'name' => 'Leave Count Basis', 'value' => '1', 'type' => 'select', 'group' => 'hr', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'count_holidays', 'name' => 'Count Holidays', 'value' => 1, 'type' => 'boolean', 'group' => 'hr', 'required' => 0, 'description' => null, 'subscription' => 0],
@@ -108,6 +109,7 @@ class CenterParameterSeeder extends Seeder
             'banks_accounts' => ['Bank'],
             'payment_gateways_accounts' => ['Payment Gateway'],
             'assets_accounts' => ['Assets'],
+            'departments' => ['Management', 'Sales', 'Marketing', 'Finance', 'Design', 'Operations'],
 
         ];
         foreach ($array as $key => $value) {
