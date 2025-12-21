@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('centers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('industry_id')->nullable()->constrained('industries')->cascadeOnDelete();
-            $table->foreignId('subscription_type')->constrained('center_packages')->cascadeOnDelete();
+            $table->foreignId('industry_id')->nullable()->constrained('industries');
+            $table->foreignId('subscription_type')->constrained('center_packages');
             $table->string('name');
             $table->string('description')->nullable();
-            $table->integer('location')->nullable()->default(2)->comment('Country Id');
+            $table->foreignId('country_id')->nullable()->constrained('countries');
+            $table->foreignId('city_id')->nullable()->constrained('cities');
             $table->string('phone')->nullable();
             $table->string('phone1')->nullable();
             $table->string('email')->nullable();

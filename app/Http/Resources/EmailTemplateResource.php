@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class IndustryResource extends JsonResource
+class EmailTemplateResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +15,12 @@ class IndustryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'value' => $this->id,
-            'title' => $this->name,
+            'id' => $this->id,
+            'name' => $this->name,
+            'subject' => $this->subject,
+            'body' => $this->body,
+            'type_id' => $this->type_id,
+            'type' => new CenterParameterValueResource($this->whenLoaded('type')),
         ];
     }
 }

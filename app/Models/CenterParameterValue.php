@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 
-class CenterParameterValues extends Model
+class CenterParameterValue extends Model
 {
     protected static function booted()
     {
@@ -18,6 +18,8 @@ class CenterParameterValues extends Model
         static::saved(fn () => Cache::forget($cacheKey));
         static::deleted(fn () => Cache::forget($cacheKey));
     }
+
+    public $fillable = ['center_parameter_id', 'value', 'order'];
 
     public function parameter(): BelongsTo
     {

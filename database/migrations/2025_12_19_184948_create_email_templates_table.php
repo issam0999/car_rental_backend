@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('industries', function (Blueprint $table) {
+        Schema::create('email_templates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('center_id')->constrained('centers')->cascadeOnDelete();
             $table->string('name');
+            $table->string('subject');
+            $table->text('body');
+            $table->foreignId('type_id')->constrained('center_parameter_values');
             $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['center_id', 'name']);
         });
     }
 
@@ -23,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('industries');
+        Schema::dropIfExists('email_templates');
     }
 };

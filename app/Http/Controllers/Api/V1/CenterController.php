@@ -116,7 +116,7 @@ class CenterController extends Controller
      */
     public function show(Center $center)
     {
-        $center->load(['industry:id,name', 'package:id,name']);
+        $center->load(['industry', 'package:id,name']);
 
         return ApiResponse::success(new CenterResource($center), 'Center retrieved successfully');
     }
@@ -124,9 +124,11 @@ class CenterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Center $center)
     {
-        //
+        $center->update($request->all());
+
+        return ApiResponse::success(new CenterResource($center), 'Center updated successfully');
     }
 
     /**

@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CountrySeeder::class,
             CitySeeder::class,
-            IndustrySeeder::class,
             CenterPackageSeeder::class,
             CurrencySeeder::class,
             CenterSeeder::class,

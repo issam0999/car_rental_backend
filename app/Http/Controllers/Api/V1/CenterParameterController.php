@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Helpers\Common;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CenterParameterResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\CenterParameter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class CenterParameterController extends Controller
 {
@@ -17,27 +15,7 @@ class CenterParameterController extends Controller
      */
     public function index(Request $request)
     {
-        $centerId = Common::centerId();
-        $cacheKey = "center_parameters_center_{$centerId}";
-
-        $params = Cache::rememberForever($cacheKey, function () use ($request) {
-
-            $result = [];
-            $groups = CenterParameter::with('values')->get()->groupBy('group');
-
-            foreach ($groups as $groupName => $items) {
-                $result[$groupName] = [];
-
-                foreach ($items as $item) {
-                    $result[$groupName][$item->key] = (new CenterParameterResource($item))
-                        ->resolve($request);
-                }
-            }
-
-            return $result;
-        });
-
-        return ApiResponse::success($params);
+        return ApiResponse::success(CenterParameter::getAll($request));
     }
 
     /**
@@ -61,7 +39,34 @@ class CenterParameterController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+
+            foreach ($request->all() as $key => $value) {
+
+                $param = CenterParameter::where('key', $key)->with('values')->first();
+
+                if (! $param) {
+                    continue;
+                }
+
+                // 👉 MULTISELECT
+                if ($param->type === 'multiselect') {
+                    $param->syncMultiselect($value);
+
+                    continue;
+                }
+
+                // 👉 NORMAL VALUE
+                $param->value = $value;
+                $param->save();
+            }
+
+            return ApiResponse::success(CenterParameter::getAll($request));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return ApiResponse::error($e->getMessage());
+        }
     }
 
     /**

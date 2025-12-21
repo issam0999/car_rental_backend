@@ -175,26 +175,9 @@ class ContactController extends Controller
             'title' => $status->title(),
             'color' => $status->color(),
         ]);
-        $industries = [
-            ['value' => 1, 'title' => 'General'],
-            ['value' => 2, 'title' => 'VIP'],
-            ['value' => 3, 'title' => 'Real Estate']]; // Future gets from centerparams crm_industries
-
-        $channels = [
-            ['value' => 1, 'title' => 'Social Media'],
-            ['value' => 2, 'title' => 'Referral'],
-            ['value' => 3, 'title' => 'Direct Sales']]; // Future gets from centerparams crm_channels
-
-        $languages = [
-            ['value' => 1, 'title' => 'English'],
-            ['value' => 2, 'title' => 'Arabic'],
-            ['value' => 3, 'title' => 'French']]; // Future gets from centerparams crm_channels
 
         $data = ['categories' => ContactCategoryResource::collection($categories),
             'statuses' => $statuses,
-            'industries' => $industries,
-            'channels' => $channels,
-            'languages' => $languages,
         ];
 
         return ApiResponse::success($data, 'Contact parameters retrieved successfully');

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\CenterParameter;
-use App\Models\CenterParameterValues;
+use App\Models\CenterParameterValue;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -62,9 +62,10 @@ class CenterParameterSeeder extends Seeder
             ['center_id' => 1, 'key' => 'ind_require_phone', 'name' => 'Require Phone', 'value' => 0, 'type' => 'boolean', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'ind_require_email', 'name' => 'Require email', 'value' => 0, 'type' => 'boolean', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'ind_require_one', 'name' => 'Require Phone or email', 'value' => 0, 'type' => 'boolean', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'ind_inactive_after', 'name' => 'Inactive After', 'value' => '4', 'type' => 'number', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'crm_industries', 'name' => 'Industries', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'crm_channels', 'name' => 'Channels', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
-            ['center_id' => 1, 'key' => 'crm_calls', 'name' => 'Calls', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'crm_calls_sentiments', 'name' => 'Call Sentiment', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'crm_call_purposes', 'name' => 'Call Purpose', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'crm_meeting_purposes', 'name' => 'Meeting Purpose', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'crm_meeting_sections', 'name' => 'Meeting Sections', 'value' => 0, 'type' => 'boolean', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
@@ -87,13 +88,15 @@ class CenterParameterSeeder extends Seeder
             ['center_id' => 1, 'key' => 'banks_accounts', 'name' => 'Banks', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'payment_gateways_accounts', 'name' => 'Payment Gateways', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'assets_accounts', 'name' => 'Assets', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'email_template_types', 'name' => 'Email Template Types', 'value' => null, 'type' => 'multiselect', 'group' => 'email', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'languages', 'name' => 'Languages', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
         ]);
 
         $multiSelect = CenterParameter::where('type', 'multiselect')->select('id', 'key')->get()->keyBy('key')->toArray();
         $array = [
             'crm_industries' => ['Commercial', 'Residential', 'Mix Use', 'Project Supervision', 'Stands', 'Master Plan', 'Events & Stands'],
             'crm_channels' => ['Social Media', 'Referral', 'Direct Sales', 'Website', 'Email', 'Phone', 'Email Compaign', 'Other'],
-            'crm_calls' => [],
+            'crm_calls_sentiments' => [],
             'crm_call_purposes' => ['Sales', 'Follow up', 'Operations', 'Production', 'Project Brief'],
             'crm_meeting_purposes' => ['Sales', 'project Brief', 'Site Visit', 'Contractor RFI', 'Suppliers', 'MEP', 'Structural', 'Internal'],
             'crm_note_types' => ['General', 'Ideas'],
@@ -110,7 +113,8 @@ class CenterParameterSeeder extends Seeder
             'payment_gateways_accounts' => ['Payment Gateway'],
             'assets_accounts' => ['Assets'],
             'departments' => ['Management', 'Sales', 'Marketing', 'Finance', 'Design', 'Operations'],
-
+            'email_template_types' => ['General', 'Quotation', 'Sales', 'RV', 'Payment Reminder', 'Meeting Invite', 'Leave Request', 'Client', 'SalesTeam', 'Employee', 'Supplier', 'Leads', 'Contact', 'PV', 'Todo', 'Project'],
+            'languages' => ['English', 'Arabic', 'French', 'German', 'Spanish', 'Portuguese', 'Russian', 'Korean', 'chineese', 'italian'],
         ];
         foreach ($array as $key => $value) {
             if (! isset($multiSelect[$key])) {
@@ -132,7 +136,9 @@ class CenterParameterSeeder extends Seeder
 
             // Insert all values at once
             if (! empty($insertData)) {
-                CenterParameterValues::insert($insertData);
+                DB::table('center_parameter_values')->insert($insertData);
+
+                // CenterParameterValue::insert($insertData);
             }
         }
     }

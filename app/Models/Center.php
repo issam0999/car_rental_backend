@@ -11,14 +11,14 @@ class Center extends Model
     public $fillable = [
         'name',
         'description',
-        'location',
+        'country_id',
+        'city_id',
         'phone',
         'phone1',
         'email',
         'email1',
         'logo',
-        'industry', 'subscription_type',
-        'status',
+        'industry_id', 'subscription_type',
 
     ];
 
@@ -29,12 +29,12 @@ class Center extends Model
 
     public function industry(): BelongsTo
     {
-        return $this->belongsTo(Industry::class);
+        return $this->belongsTo(CenterParameterValue::class);
     }
 
     public function country(): BelongsTo
     {
-        return $this->belongsTo(Country::class, 'location');
+        return $this->belongsTo(Country::class);
     }
 
     public function package(): BelongsTo

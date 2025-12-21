@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\V1\CenterParameterController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\CountryController;
 use App\Http\Controllers\Api\v1\DocumentController;
-use App\Http\Controllers\Api\V1\IndustryController;
+use App\Http\Controllers\Api\V1\EmailTemplateController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,12 +24,12 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
         Route::post('/contacts/delete-connection/{connection}', [ContactController::class, 'deleteConnection']);
         Route::apiResource('contacts', ContactController::class);
         Route::apiResource('centers', CenterController::class);
-        Route::apiResource('industries', IndustryController::class);
         Route::apiResource('center-packages', CenterPackageController::class);
         Route::apiResource('countries', CountryController::class);
         Route::get('documents/parameters', [documentController::class, 'parameters']);
         Route::apiResource('documents', DocumentController::class);
         Route::apiResource('parameters', CenterParameterController::class);
+        Route::apiResource('email-templates', EmailTemplateController::class);
     });
 });
 

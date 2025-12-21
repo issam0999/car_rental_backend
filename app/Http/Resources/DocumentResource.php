@@ -28,6 +28,7 @@ class DocumentResource extends JsonResource
             // display
             'url' => $this->path ?? $this->external_link,
             'status' => ModelsDocument::STATUS_ARR[0],
+            'type' => new CenterParameterValueResource($this->whenLoaded('type')),
         ];
     }
 }

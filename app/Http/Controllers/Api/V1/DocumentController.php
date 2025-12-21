@@ -27,7 +27,7 @@ class DocumentController extends Controller
         ]);
 
         $query = Document::where('documentable_type', $request->documentable_type)
-            ->where('documentable_id', $request->documentable_id);
+            ->where('documentable_id', $request->documentable_id)->with('type');
 
         // Search
         if ($request->filled('q')) {
@@ -90,6 +90,7 @@ class DocumentController extends Controller
             }
             // Create document
             $document = Document::create($data);
+            $document->load('type');
 
             return ApiResponse::success(new DocumentResource($document), 'Document stored successfully.');
         } catch (\Exception $e) {
@@ -144,8 +145,9 @@ class DocumentController extends Controller
             }
 
             $document->update($data);
+            $document->load('type');
 
-            return ApiResponse::success($document, 'Document updated successfully.');
+            return ApiResponse::success(new DocumentResource($document), 'Document updated successfully.');
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -169,14 +171,8 @@ class DocumentController extends Controller
 
     public function parameters(): JsonResponse
     {
-        $types = [
-            ['value' => 1, 'title' => 'Contract'],
-            ['value' => 2, 'title' => 'Passport'],
-            ['value' => 3, 'title' => 'ID Card']]; // Future gets from centerparams crm_industries
-
         $data = [
             'statuses' => Document::STATUS_ARR,
-            'types' => $types,
         ];
 
         return ApiResponse::success($data, 'Document parameters retrieved successfully');

@@ -14,10 +14,11 @@ class CenterParameterResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'value' => $this->type === 'multiselect' ? CenterParameterValueResource::collection($this->values) : $this->value,
+            'value' => $this->getValue(),
             'hint' => $this->description,
             'required' => (bool) $this->required,
             'type' => $this->type,
