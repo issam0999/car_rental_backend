@@ -22,7 +22,7 @@ class CenterController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Center::with('industry', 'package');
-
+        $stats = [];
         // Search
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
@@ -56,12 +56,22 @@ class CenterController extends Controller
         // Paginate
         $data = $query->paginate($request->get('itemsPerPage', 15));
 
+        if ($request->filled('with_stats') && $request->with_stats == 'true') {
+            $stats = [
+                'active_centers' => Center::count(),
+                'free_centers' => Center::whereHas('package', fn ($q) => $q->where('paid', 0))->count(),
+                'paid_centers' => Center::whereHas('package', fn ($q) => $q->where('paid', 1))->count(),
+                'active_users' => User::count(),
+            ];
+        }
+
         return ApiResponse::success(
             [
                 'items' => CenterResource::collection($data),
                 'total' => $data->total(),
                 'currentPage' => $data->currentPage(),
                 'lastPage' => $data->lastPage(),
+                'stats' => $stats,
             ],
             'Centers retrieved successfully'
         );

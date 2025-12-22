@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\CenterParameter;
 use App\Models\CenterParameterValue;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -92,7 +91,7 @@ class CenterParameterSeeder extends Seeder
             ['center_id' => 1, 'key' => 'languages', 'name' => 'Languages', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
         ]);
 
-        $multiSelect = CenterParameter::where('type', 'multiselect')->select('id', 'key')->get()->keyBy('key')->toArray();
+        $multiSelect = DB::table('center_parameters')->where('type', 'multiselect')->select('id', 'key')->get()->keyBy('key')->map(fn ($item) => (array) $item)->toArray();
         $array = [
             'crm_industries' => ['Commercial', 'Residential', 'Mix Use', 'Project Supervision', 'Stands', 'Master Plan', 'Events & Stands'],
             'crm_channels' => ['Social Media', 'Referral', 'Direct Sales', 'Website', 'Email', 'Phone', 'Email Compaign', 'Other'],

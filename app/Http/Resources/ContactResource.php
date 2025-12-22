@@ -43,8 +43,8 @@ class ContactResource extends JsonResource
             'categories' => ContactCategoryResource::collection($this->whenLoaded('categories')),
 
             'status' => [
-                'title' => $this->status->title(),
-                'color' => $this->status->color(),
+                'title' => $this->status?->title(),
+                'color' => $this->status?->color(),
             ],
             'connections' => ContactConnectionResource::collection($this->whenLoaded('connections')),
             'sales_team_member' => $this->whenLoaded('salesteam') ? true : false,

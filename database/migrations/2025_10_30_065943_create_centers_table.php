@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('centers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('industry_id')->nullable()->constrained('industries');
+            $table->bigInteger('industry_id')->nullable();
             $table->foreignId('subscription_type')->constrained('center_packages');
             $table->string('name');
             $table->string('description')->nullable();

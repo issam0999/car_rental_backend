@@ -15,14 +15,16 @@ class CenterSeeder extends Seeder
         DB::table('centers')->insert([[
             'name' => 'Admin',
             'description' => 'Squarely admin center',
-            'location' => 2,
+            'country_id' => 2,
+            'city_id' => 1,
             'subscription_type' => 1,
             'industry_id' => 1,
             'status' => 1,
         ], [
             'name' => 'Squarely Business Management',
             'description' => 'Squarely Business Management',
-            'location' => 2,
+            'country_id' => 2,
+            'city_id' => 1,
             'subscription_type' => 1,
             'industry_id' => 1,
             'status' => 1,
