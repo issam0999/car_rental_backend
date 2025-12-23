@@ -47,4 +47,13 @@ class FileHelper
             Storage::delete($path);
         }
     }
+
+    public static function getImageUrl($path)
+    {
+        // return asset('storage/'.$filePath);
+        $url = Storage::disk('public')->url($path);
+
+        return $url;
+
+    }
 }

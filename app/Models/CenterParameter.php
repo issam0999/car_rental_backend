@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class CenterParameter extends Model
 {
@@ -77,7 +78,7 @@ class CenterParameter extends Model
 
     public function syncMultiselect(array $items): void
     {
-        $existing = $this->values->keyBy('id');
+        $existing = $this->values->where('updatable', '!=', 0)->keyBy('id');
 
         $incomingIds = collect($items)
             ->pluck('id')
@@ -87,23 +88,28 @@ class CenterParameter extends Model
         // Delete removed values
         $this->values()
             ->whereNotIn('id', $incomingIds)
+            ->where('updatable', operator: 1)
             ->update(['status' => 0]);
 
         foreach ($items as $item) {
 
             // Update existing
             if (! empty($item['id']) && $existing->has($item['id'])) {
+                Log::info($item);
+
                 $existing[$item['id']]->update([
                     'value' => $item['text'],
                 ]);
 
                 continue;
             }
-
             // Insert new
-            $this->values()->create([
-                'value' => $item['text'],
-            ]);
+            if (empty($item['id'])) {
+                $this->values()->create([
+                    'value' => $item['text'],
+                ]);
+            }
+
         }
     }
 }

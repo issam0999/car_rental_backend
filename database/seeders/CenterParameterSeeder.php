@@ -89,6 +89,8 @@ class CenterParameterSeeder extends Seeder
             ['center_id' => 1, 'key' => 'assets_accounts', 'name' => 'Assets', 'value' => null, 'type' => 'multiselect', 'group' => 'accounts', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'email_template_types', 'name' => 'Email Template Types', 'value' => null, 'type' => 'multiselect', 'group' => 'email', 'required' => 0, 'description' => null, 'subscription' => 0],
             ['center_id' => 1, 'key' => 'languages', 'name' => 'Languages', 'value' => null, 'type' => 'multiselect', 'group' => 'crm', 'required' => 0, 'description' => null, 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'license_number', 'name' => 'License Number', 'value' => null, 'type' => 'text', 'group' => 'invoicing', 'required' => 0, 'description' => 'Enter the license number and attach the license', 'subscription' => 0],
+            ['center_id' => 1, 'key' => 'license_number_attachment', 'name' => 'License Number Attachment', 'value' => null, 'type' => 'text', 'group' => 'invoicing', 'required' => 0, 'description' => null, 'subscription' => 0],
         ]);
 
         $multiSelect = DB::table('center_parameters')->where('type', 'multiselect')->select('id', 'key')->get()->keyBy('key')->map(fn ($item) => (array) $item)->toArray();
@@ -139,6 +141,13 @@ class CenterParameterSeeder extends Seeder
 
                 // CenterParameterValue::insert($insertData);
             }
+
+            // updatable not required
+            $docTypeId = DB::table('center_parameters')->where('key', 'doc_types')->first();
+            DB::table('center_parameter_values')->insert([
+                ['center_parameter_id' => $docTypeId->id, 'value' => 'License Number', 'updatable' => 0, 'order' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ]);
+
         }
     }
 }

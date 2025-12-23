@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('value');
             $table->tinyInteger('status')->default(1);
             $table->integer('order')->default(1);
+            $table->tinyInteger('updatable')->default(1);
             $table->timestamps();
 
             $table->unique(['center_parameter_id', 'value']);

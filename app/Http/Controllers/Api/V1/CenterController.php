@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CenterResource;
 use App\Http\Responses\ApiResponse;
@@ -27,7 +28,6 @@ class CenterController extends Controller
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->q}%")
-                    ->orWhere('location', 'like', "%{$request->q}%")
                     ->orWhere('email', 'like', "%{$request->q}%");
             });
         }
@@ -41,6 +41,10 @@ class CenterController extends Controller
         // Industry filter
         if ($request->filled('industry')) {
             $query->where('industry_id', $request->industry);
+        }
+        // Country filter
+        if ($request->filled('location')) {
+            $query->where('country_id', $request->location);
         }
 
         // Package filter
@@ -136,7 +140,21 @@ class CenterController extends Controller
      */
     public function update(Request $request, Center $center)
     {
-        $center->update($request->all());
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:centers,email,'.$center->id,
+            'description' => 'string|max:255|nullable',
+            'subscription_type' => 'integer|exists:center_packages,id',
+            'country_id' => 'integer|exists:countries,id',
+            'city_id' => 'integer|exists:cities,id',
+            'phone' => 'string|nullable',
+            'image_url' => 'string|nullable',
+        ]);
+        if ($data['image_url']) {
+            $image = FileHelper::saveBase64Image($request->image_url, "centers/{$center->id}/logo");
+            $data['logo'] = $image;
+        }
+        $center->update($data);
 
         return ApiResponse::success(new CenterResource($center), 'Center updated successfully');
     }
