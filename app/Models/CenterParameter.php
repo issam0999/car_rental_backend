@@ -5,10 +5,12 @@ namespace App\Models;
 use App\Helpers\Common;
 use App\Http\Resources\CenterParameterResource;
 use App\Http\Resources\CenterParameterValueResource;
+use Dom\Document;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -41,6 +43,11 @@ class CenterParameter extends Model
         return $this->hasMany(CenterParameterValue::class)->where('status', 1);
     }
 
+    public function file(): HasOne
+    {
+        return $this->hasOne(Document::class, 'id', 'value');
+    }
+
     public function getValue()
     {
         if ($this->type === 'multiselect') {
@@ -48,6 +55,9 @@ class CenterParameter extends Model
         }
         if ($this->type === 'boolean') {
             return (bool) $this->value;
+        }
+        if ($this->type === 'file') {
+            return (bool) $this->file;
         }
 
         return is_numeric($this->value) ? (int) $this->value : $this->value;

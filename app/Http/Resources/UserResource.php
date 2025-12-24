@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,16 +15,17 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'avatar' => '',
             'id' => $this->id,
-            'name' => $this->name,
             'email' => $this->email,
+            'position' => '',
             'verified' => (bool) $this->email_verified_at,
             'created_at' => $this->created_at?->toDateTimeString(),
             'status' => $this->status,
             'center' => $this->center,
-            'role' => 'admin',
+            'role' => ['name' => 'admin', 'color' => 'primary', 'icon' => 'tabler-device-laptop'],
             'contact' => new ContactResource($this->whenLoaded('contact')),
-            'report_to' => Contact::select(['id', 'name', 'image'])->where('id', 1)->get()->toArray(),
+            'report_to' => [],
         ];
     }
 }
