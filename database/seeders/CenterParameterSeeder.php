@@ -144,12 +144,11 @@ class CenterParameterSeeder extends Seeder
                 // CenterParameterValue::insert($insertData);
             }
 
-            // updatable not required
-            $docTypeId = DB::table('center_parameters')->where('key', 'doc_types')->first();
-            DB::table('center_parameter_values')->insert([
-                ['center_parameter_id' => $docTypeId->id, 'value' => 'License Number', 'updatable' => 0, 'order' => 1, 'created_at' => now(), 'updated_at' => now()],
-            ]);
-
         }
+        // updatable not required
+        $docTypeId = DB::table('center_parameters')->where('key', 'doc_types')->first();
+        DB::table('center_parameter_values')->insert([
+            ['center_parameter_id' => $docTypeId->id, 'value' => 'License Number', 'updatable' => 0, 'order' => 1, 'created_at' => now(), 'updated_at' => now()],
+        ]);
     }
 }

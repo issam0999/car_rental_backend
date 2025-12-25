@@ -15,17 +15,20 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'avatar' => '',
             'id' => $this->id,
             'email' => $this->email,
-            'position' => '',
+            'position' => '', // from employee
             'verified' => (bool) $this->email_verified_at,
             'created_at' => $this->created_at?->toDateTimeString(),
-            'status' => $this->status,
+            'status' => [
+                'value' => $this->status?->value,
+                'title' => $this->status?->title(),
+                'color' => $this->status?->color(),
+            ],
             'center' => $this->center,
             'role' => ['name' => 'admin', 'color' => 'primary', 'icon' => 'tabler-device-laptop'],
             'contact' => new ContactResource($this->whenLoaded('contact')),
-            'report_to' => [],
+            'report_to' => [], // from employee later
         ];
     }
 }

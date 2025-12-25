@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ContactStatus;
+use App\Helpers\Common;
 use App\Helpers\FileHelper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,8 +44,10 @@ class Contact extends Model
 
     protected static function booted(): void
     {
-        static::addGlobalScope('center', function (Builder $builder) {
-            $builder->where('center_id', auth()->user()->center_id);
+        $centerId = Common::centerId();
+
+        static::addGlobalScope('center', function (Builder $builder) use ($centerId) {
+            $builder->where('center_id', $centerId);
         });
     }
 

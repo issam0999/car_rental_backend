@@ -12,7 +12,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CenterController extends Controller
@@ -102,17 +101,15 @@ class CenterController extends Controller
                 'subscription_type' => $validated['subscription_type'],
             ]);
 
-            $password = Str::password();
-            User::CreateNew([
+            $user = User::CreateNew([
                 'name' => 'Admin for '.$center->name,
                 'email' => $center->email,
                 'center_id' => $center->id,
-                'password' => $password,
             ]);
             DB::commit();
 
             // Send email
-            Mail::to($center->email)->queue(new CenterCreated($center->load('package'), $request->user(), $password));
+            Mail::to($center->email)->queue(new CenterCreated($center->load('package'), $request->user(), $user->password));
 
             return ApiResponse::success(
                 new CenterResource($center),

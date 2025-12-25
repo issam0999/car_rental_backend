@@ -5,20 +5,23 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enums\ContactStatus;
+use App\Enums\userStatus;
+use App\Helpers\Common;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +34,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'contact_id',
         'center_id',
+        'status',
     ];
+
+    // for spatie
+    protected $guard_name = 'api';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -53,6 +60,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'status' => UserStatus::class,
+
         ];
     }
 
@@ -66,15 +75,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Center::class);
     }
 
-    protected function status(): Attribute
-    {
-        $statuses = [0 => 'inactive', 1 => 'active'];
-
-        return Attribute::make(
-            get: fn (string $value) => $statuses[$value],
-        );
-    }
-
     /**
      * Creates a new user.
      *
@@ -83,18 +83,23 @@ class User extends Authenticatable implements MustVerifyEmail
     public static function createNew(array $data): User
     {
         // First create the contact record
+        $password = Str::password();
+        $centerId = $data['center_id'] ?? Common::centerId();
+
         $contact = Contact::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'center_id' => $data['center_id'] ?? 1,
+            'center_id' => $centerId,
             'status' => ContactStatus::Active,
             'type_id' => Contact::TYPE_INDIVIDUAL,
         ]);
+
         $user = User::create([
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => Hash::make($password),
             'contact_id' => $contact->id,
-            'center_id' => $data['center_id'] ?? 1,
+            'center_id' => $centerId,
+            'status' => userStatus::Active,
         ]);
 
         $user->sendEmailVerificationNotification();

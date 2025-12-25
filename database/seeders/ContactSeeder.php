@@ -12,8 +12,7 @@ class ContactSeeder extends Seeder
      */
     public function run(): void
     {
-        $rows = [
-            ['center_id' => 1, 'type_id' => 1, 'name' => 'Issam Hajj Ali', 'email' => 'isamhajjali@gmail.com', 'status' => 'active', 'created_at' => now(), 'updated_at' => now(), 'deleted_at' => null, 'created_by' => 1, 'updated_by' => 1, 'deleted_by' => null, 'created_ip' => '127.0.0.1', 'updated_ip' => '127.0.0.1'], ];
+        $rows = ['center_id' => 1, 'type_id' => 1, 'name' => 'Issam Hajj Ali', 'email' => 'isamhajjali@gmail.com', 'status' => 'active', 'created_at' => now(), 'updated_at' => now()];
         DB::table('contacts')->insert($rows);
         DB::table('users')->update(['contact_id' => 1]);
     }

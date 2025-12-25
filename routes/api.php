@@ -7,11 +7,12 @@ use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\CountryController;
 use App\Http\Controllers\Api\v1\DocumentController;
 use App\Http\Controllers\Api\V1\EmailTemplateController;
+use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\UserController;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum', 'verified')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -30,6 +31,9 @@ Route::middleware('auth:sanctum', 'verified')->group(function () {
         Route::apiResource('documents', DocumentController::class);
         Route::apiResource('parameters', CenterParameterController::class);
         Route::apiResource('email-templates', EmailTemplateController::class);
+
+        Route::apiResource('roles', RoleController::class)->middleware('can:admin');
+
     });
 });
 
