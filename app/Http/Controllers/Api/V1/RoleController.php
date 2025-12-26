@@ -15,7 +15,10 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::with('permissions')->get();
+        $roles = Role::with('permissions', 'users')->get();
+        foreach ($roles as $role) {
+
+        }
 
         // return $roles;
 

@@ -16,7 +16,7 @@ class RolePermissionSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Contact permissions
+        // Contact permissions 316,883,283
         $permissions = [
             'admin',
             'contact.view',
@@ -39,6 +39,7 @@ class RolePermissionSeeder extends Seeder
 
         $viewer->syncPermissions(['contact.view']);
         $editor->syncPermissions(['contact.view', 'contact.create', 'contact.update']);
+        $admin->syncPermissions(['admin']);
 
         $user = User::find(1);
         $user->assignRole($admin);
