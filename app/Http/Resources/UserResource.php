@@ -25,8 +25,9 @@ class UserResource extends JsonResource
                 'title' => $this->status?->title(),
                 'color' => $this->status?->color(),
             ],
-            'center' => $this->center,
-            'role' => ['name' => 'admin', 'color' => 'primary', 'icon' => 'tabler-device-laptop'],
+            'center' => CenterResource::make($this->whenLoaded('center')), // $this->center,
+            'roles' => $this->roles->pluck('name')->toArray(),
+            'permissions' => $this->getPermissionsViaRoles()->pluck('name')->unique()->toArray(),
             'contact' => new ContactResource($this->whenLoaded('contact')),
             'report_to' => [], // from employee later
         ];

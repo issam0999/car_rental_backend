@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Helpers\Common;
 use App\Http\Resources\CenterParameterResource;
 use App\Http\Resources\CenterParameterValueResource;
-use Dom\Document;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

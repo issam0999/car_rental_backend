@@ -19,7 +19,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // do not put center clause in user boot
-        $query = User::where('center_id', $request->user()->center_id)->with('contact');
+        $query = User::where('center_id', operator: $request->user()->center_id)->with('contact', 'roles');
         // Search
         if ($request->filled('q')) {
             $query->where(function ($q) use ($request) {
@@ -92,11 +92,12 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'roles' => 'required|exists:roles,name',
         ]);
         $data = [
             'name' => $validated['name'],
             'email' => $validated['email'],
-
+            'roles' => $validated['roles'],
         ];
         $user = User::createNew($data);
 
@@ -108,7 +109,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load('contact');
+        $user->load('contact', 'center', 'roles', 'contact.country');
 
         return ApiResponse::success(new UserResource($user), 'User retrieved successfully');
     }
@@ -125,6 +126,7 @@ class UserController extends Controller
                 'email' => ['sometimes', 'email', Rule::unique('users')->ignore($user->id)],
                 'password' => 'nullable|string|min:6',
                 'status' => ['sometimes', Rule::enum(UserStatus::class)],
+                'roles' => 'sometimes|exists:roles,name',
 
             ]);
 
@@ -135,6 +137,10 @@ class UserController extends Controller
             }
 
             $user->update($validated);
+
+            if ($request->filled('roles')) {
+                $user->syncRoles($request->roles);
+            }
 
             $user->load('contact');
 

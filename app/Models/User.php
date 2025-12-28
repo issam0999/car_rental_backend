@@ -101,6 +101,8 @@ class User extends Authenticatable implements MustVerifyEmail
             'center_id' => $centerId,
             'status' => userStatus::Active,
         ]);
+        // Assign roles
+        $user->assignRole($data['roles']);
 
         $user->sendEmailVerificationNotification();
 

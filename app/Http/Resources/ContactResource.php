@@ -35,20 +35,16 @@ class ContactResource extends JsonResource
             'website' => $this->website,
             'language_id' => $this->language_id,
             // display
-            'country' => [
-                'name' => $this->country?->name,
-                'city' => $this->city?->name,
-            ],
+            'country' => $this->whenLoaded('country', fn () => [$this->country?->name, $this->city?->name]), // [
             'type' => $this->getType(),
             'categories' => ContactCategoryResource::collection($this->whenLoaded('categories')),
-
             'status' => [
                 'title' => $this->status?->title(),
                 'color' => $this->status?->color(),
             ],
             'connections' => ContactConnectionResource::collection($this->whenLoaded('connections')),
-            'sales_team_member' => $this->whenLoaded('salesteam') ? true : false,
-            'sales_team' => new SalesTeamResouce($this->whenLoaded('salesteam')),
+            'sales_team_member' => $this->salesTeam()->exists(),
+            'sales_team' => new SalesTeamResouce($this->whenLoaded('salesTeam')),
 
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
