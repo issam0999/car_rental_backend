@@ -23,7 +23,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/contacts/{contact}/add-connections', [ContactController::class, 'addConnections']);
         Route::post('/contacts/update-connection/{connection}', [ContactController::class, 'updateConnection']);
         Route::post('/contacts/delete-connection/{connection}', [ContactController::class, 'deleteConnection']);
-        Route::apiResource('contacts', ContactController::class);
         Route::apiResource('centers', CenterController::class);
         Route::apiResource('center-packages', CenterPackageController::class);
         Route::apiResource('countries', CountryController::class);
@@ -31,8 +30,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('documents', DocumentController::class);
         Route::apiResource('parameters', CenterParameterController::class);
         Route::apiResource('email-templates', EmailTemplateController::class);
-
         Route::apiResource('roles', RoleController::class)->middleware('can:admin');
+
+        // Contact
+        Route::middleware('permission:contact.view')->group(function () {
+            Route::get('/contacts', [ContactController::class, 'index']);
+            Route::get('/contacts/{contact}', [ContactController::class, 'show']);
+        });
+
+        Route::middleware('permission:contact.write')->group(function () {
+            Route::post('/contacts', [ContactController::class, 'store']);
+            Route::put('/contacts/{contact}', [ContactController::class, 'update']);
+            Route::patch('/contacts/{contact}', [ContactController::class, 'update']);
+        });
+
+        Route::middleware('permission:contact.delete')->group(function () {
+            Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
+        });
 
     });
 });

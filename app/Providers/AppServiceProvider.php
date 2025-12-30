@@ -24,6 +24,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Allow super-admins to do anything
+        Gate::before(function ($user, $ability) {
+            if ($user->hasRole('super-admin')) {
+                return true;
+            }
+        });
+
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
             return config('app.frontend_url')."/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         });

@@ -32,8 +32,9 @@ class RolePermissionSeeder extends Seeder
         }
 
         // Roles
-        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api', 'center_id' => 1]);
-        $crm = Role::firstOrCreate(['name' => 'crm', 'guard_name' => 'api', 'center_id' => 1]);
+        $superAdmin = Role::firstOrCreate(['name' => 'super-admin', 'title' => 'Super Admin', 'guard_name' => 'api', 'center_id' => 1]);
+        $admin = Role::firstOrCreate(['name' => 'admin', 'title' => 'Admin', 'guard_name' => 'api', 'center_id' => 1]);
+        $crm = Role::firstOrCreate(['name' => 'crm', 'title' => 'CRM', 'guard_name' => 'api', 'center_id' => 1]);
 
         // Assign permissions to roles
         $admin->syncPermissions(['admin']);
@@ -41,6 +42,6 @@ class RolePermissionSeeder extends Seeder
 
         // Assign roles
         $user = User::find(1);
-        $user->assignRole($admin);
+        $user->assignRole($superAdmin);
     }
 }
