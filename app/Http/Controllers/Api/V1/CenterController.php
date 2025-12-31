@@ -11,6 +11,7 @@ use App\Models\Center;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -21,6 +22,8 @@ class CenterController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        Gate::authorize('viewAny', Center::class);
+
         $query = Center::with('industry', 'package');
         $stats = [];
         // Search
@@ -85,6 +88,8 @@ class CenterController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        Gate::authorize('create', Center::class);
+
         DB::beginTransaction();
         try {
             $validated = $request->validate([
@@ -127,6 +132,8 @@ class CenterController extends Controller
      */
     public function show(Center $center)
     {
+        Gate::authorize('view', $center);
+
         $center->load(['industry', 'package:id,name']);
 
         return ApiResponse::success(new CenterResource($center), 'Center retrieved successfully');
@@ -137,6 +144,8 @@ class CenterController extends Controller
      */
     public function update(Request $request, Center $center)
     {
+        Gate::authorize('update', Center::class);
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:centers,email,'.$center->id,
@@ -159,8 +168,9 @@ class CenterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Center $center)
     {
-        //
+        Gate::authorize('delete', $center);
+
     }
 }

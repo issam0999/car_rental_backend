@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
 use App\Http\Responses\ApiResponse;
+use App\Models\Permission as ModelsPermission;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -18,9 +18,10 @@ class RoleController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Role::with('permissions', 'users', 'users.contact')
+            ->whereNot('name', 'super-admin')
             ->where('center_id', $request->user()->center_id);
 
-        $permissions = Permission::getPermissionsWithModule();
+        $permissions = ModelsPermission::getPermissionsWithModule();
 
         // Search
         if ($request->filled('q')) {

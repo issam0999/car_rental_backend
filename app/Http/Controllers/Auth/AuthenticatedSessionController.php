@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
             throw new \Exception('Your email address is not verified.');
         }
 
-        $user->load('contact');
+        $user->load('contact', 'center', 'roles', 'contact.country');
 
         $token = $user->createToken('main')->plainTextToken;
 

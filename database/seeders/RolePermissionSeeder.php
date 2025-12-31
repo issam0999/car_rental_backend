@@ -18,30 +18,33 @@ class RolePermissionSeeder extends Seeder
 
         // Contact permissions
         $permissions = [
-            'admin',
-            'contact.view',
-            'contact.write',
-            'contact.delete',
+            ['name' => 'admin', 'module' => 'admin'],
+            ['name' => 'contacts.view', 'module' => 'contacts'],
+            ['name' => 'contacts.create', 'module' => 'contacts'],
+            ['name' => 'contacts.update', 'module' => 'contacts'],
+            ['name' => 'contacts.delete', 'module' => 'contacts'],
         ];
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate([
-                'name' => $permission,
+                'name' => $permission['name'],
+                'module' => $permission['module'],
                 'guard_name' => 'api',
             ]);
         }
 
         // Roles
-        $superAdmin = Role::firstOrCreate(['name' => 'super-admin', 'title' => 'Super Admin', 'guard_name' => 'api', 'center_id' => 1]);
-        $admin = Role::firstOrCreate(['name' => 'admin', 'title' => 'Admin', 'guard_name' => 'api', 'center_id' => 1]);
-        $crm = Role::firstOrCreate(['name' => 'crm', 'title' => 'CRM', 'guard_name' => 'api', 'center_id' => 1]);
+        $superAdmin = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'api', 'center_id' => 1]);
+        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api', 'center_id' => 1]);
+        $crm = Role::firstOrCreate(['name' => 'crm', 'guard_name' => 'api', 'center_id' => 1]);
 
         // Assign permissions to roles
         $admin->syncPermissions(['admin']);
-        $crm->syncPermissions(['contact.view', 'contact.write', 'contact.delete']);
+        $crm->syncPermissions(['contacts.view', 'contacts.create', 'contacts.update', 'contacts.delete']);
 
         // Assign roles
         $user = User::find(1);
         $user->assignRole($superAdmin);
+        $user->assignRole($crm);
     }
 }

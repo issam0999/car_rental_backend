@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -18,6 +19,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize(ability: 'admin');
+
         // do not put center clause in user boot
         $query = User::where('center_id', operator: $request->user()->center_id)->with('contact', 'roles');
         // Search
@@ -89,6 +92,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('admin', User::class);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -156,6 +160,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        Gate::authorize(ability: 'admin');
+
         $user->delete();
 
         return ApiResponse::success(['message' => 'User deleted successfully']);

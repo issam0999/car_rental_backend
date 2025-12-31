@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\ContactStatus;
 use App\Helpers\Common;
 use App\Helpers\FileHelper;
+use App\Policies\ContactPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[UsePolicy(ContactPolicy::class)]
 class Contact extends Model
 {
     use HasFactory;

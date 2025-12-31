@@ -15,6 +15,7 @@ use App\Models\ContactCategory;
 use App\Models\ContactConnection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -25,6 +26,8 @@ class ContactController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Contact::class);
+
         $user = $request->user();
         $query = Contact::where('center_id', $user->center_id)->with('categories', 'connections', 'connections.connectionContact', 'connections.contact');
 
@@ -83,6 +86,7 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
+        Gate::authorize('create', Contact::class);
 
         $data = $request->validated();
 
@@ -108,6 +112,8 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
+        Gate::authorize('view', $contact);
+
         $contact->load('categories', 'connections', 'connections.connectionContact', 'connections.contact', 'salesteam');
 
         return ApiResponse::success(new ContactResource($contact), 'Contact retrieved successfully');
@@ -118,6 +124,8 @@ class ContactController extends Controller
      */
     public function update(UpdateContactRequest $request, Contact $contact)
     {
+        Gate::authorize('update', $contact);
+
         try {
             $data = $request->validated();
             Log::info($data);
@@ -151,6 +159,8 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
+        Gate::authorize('delete', $contact);
+
         $contact->delete();
 
         return ApiResponse::success(null, 'Contact deleted successfully');
