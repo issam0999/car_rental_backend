@@ -12,7 +12,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -89,8 +88,8 @@ class CenterController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        // Gate::authorize('create', Center::class);
-        Log::error('Creating center');
+        Gate::authorize('create', Center::class);
+
         DB::beginTransaction();
         try {
             $validated = $request->validate([
@@ -115,7 +114,7 @@ class CenterController extends Controller
             DB::commit();
 
             // Send email
-            // Mail::to($center->email)->queue(new CenterCreated($center->load('package'), $request->user(), $user->password));
+            Mail::to($center->email)->queue(new CenterCreated($center->load('package'), $request->user(), $user->password));
 
             return ApiResponse::success(
                 new CenterResource($center),
