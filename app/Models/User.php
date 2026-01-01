@@ -80,10 +80,10 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @param  array<string, string>  $data
      */
-    public static function createNew(array $data): User
+    public static function createNew(array $data, $password = null): User
     {
         // First create the contact record
-        $password = Str::password();
+        $password = $password ?? Str::password();
         $centerId = $data['center_id'] ?? Common::centerId();
 
         $contact = Contact::create([

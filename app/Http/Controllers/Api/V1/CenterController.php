@@ -6,13 +6,12 @@ use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CenterResource;
 use App\Http\Responses\ApiResponse;
-use App\Mail\CenterCreated;
 use App\Models\Center;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CenterController extends Controller
@@ -90,8 +89,7 @@ class CenterController extends Controller
     {
         Gate::authorize('create', Center::class);
 
-        DB::beginTransaction();
-        try {
+        DB::transaction(function () use ($request, &$center, &$user, &$password) {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:centers,email',
@@ -102,29 +100,30 @@ class CenterController extends Controller
             $center = Center::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
-                'description' => $validated['description'] || '',
+                'description' => $validated['description'] ?? null,
                 'subscription_type' => $validated['subscription_type'],
             ]);
 
+            $password = Str::password();
             $user = User::createNew([
                 'name' => 'Admin for '.$center->name,
                 'email' => $center->email,
                 'center_id' => $center->id,
-            ]);
-            DB::commit();
+            ], $password);
 
-            // Send email
-            Mail::to($center->email)->queue(new CenterCreated($center->load('package'), $request->user(), $user->password));
+        });
+        // Send email
+        event(new \App\Events\CenterCreated(
+            $center,
+            $user,
+            $password
+        ));
 
-            return ApiResponse::success(
-                new CenterResource($center),
-                'Center created successfully'
-            );
-        } catch (\Throwable $e) {
-            DB::rollBack();
+        return ApiResponse::success(
+            new CenterResource($center),
+            'Center created successfully'
+        );
 
-            return ApiResponse::error($e->getMessage());
-        }
     }
 
     /**
