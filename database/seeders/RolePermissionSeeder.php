@@ -45,6 +45,7 @@ class RolePermissionSeeder extends Seeder
         // Assign roles
         $user = User::find(1);
         $user->assignRole($superAdmin);
+        $user->assignRole($admin);
         $user->assignRole($crm);
     }
 }

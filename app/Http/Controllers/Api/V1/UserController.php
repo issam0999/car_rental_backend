@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\userStatus;
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ApiResponse;
@@ -34,7 +34,7 @@ class UserController extends Controller
         // Status filter
         if ($request->filled('status')) {
             $status = $request->status;
-            if (in_array($status, userStatus::values())) {
+            if (in_array($status, UserStatus::values())) {
                 $query->where('status', $status);
             }
         }
