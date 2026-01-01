@@ -104,7 +104,7 @@ class CenterController extends Controller
                 'subscription_type' => $validated['subscription_type'],
             ]);
 
-            $password = Str::password();
+            $password = Str::password(6, 4, 2);
             $user = User::createNew([
                 'name' => 'Admin for '.$center->name,
                 'email' => $center->email,
