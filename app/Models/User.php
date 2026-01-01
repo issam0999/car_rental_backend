@@ -108,7 +108,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $user->assignRole($data['roles']);
         }
 
-        // $user->sendEmailVerificationNotification();
+        $user->sendEmailVerificationNotification();
 
         return $user;
     }
