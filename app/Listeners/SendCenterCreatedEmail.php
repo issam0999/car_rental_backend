@@ -4,9 +4,10 @@ namespace App\Listeners;
 
 use App\Events\CenterCreated;
 use App\Mail\CenterCreated as MailCenterCreated;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendCenterCreatedEmail
+class SendCenterCreatedEmail implements ShouldQueue
 {
     /**
      * Create the event listener.
