@@ -5,7 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enums\ContactStatus;
-use App\Enums\userStatus;
+use App\Enums\UserStatus;
 use App\Helpers\Common;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -99,7 +99,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => Hash::make($password),
             'contact_id' => $contact->id,
             'center_id' => $centerId,
-            'status' => userStatus::Active,
+            'status' => UserStatus::Active,
         ]);
         // Assign roles
         $user->assignRole($data['roles']);
