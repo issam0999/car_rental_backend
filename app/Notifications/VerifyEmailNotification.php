@@ -2,11 +2,15 @@
 
 namespace App\Notifications;
 
-use Illuminate\Auth\Notifications\VerifyEmail as BaseVerifyEmail;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\URL;
 
-class VerifyEmailNotification extends BaseVerifyEmail
+class VerifyEmailNotification extends VerifyEmail implements ShouldQueue
 {
+    use Queueable;
+
     protected function verificationUrl($notifiable)
     {
         // 1) Generate API signed URL
@@ -28,7 +32,6 @@ class VerifyEmailNotification extends BaseVerifyEmail
 
         // Optional: strip /api/v1 prefix if frontend route is /verify-email/:id/:hash
         $path = preg_replace('#^/api/v1#', '', $path);
-        var_dump($frontend.$path.($query ? '?'.$query : ''));
 
         return $frontend.$path.($query ? '?'.$query : '');
     }
