@@ -102,7 +102,11 @@ class User extends Authenticatable implements MustVerifyEmail
             'status' => UserStatus::Active,
         ]);
         // Assign roles
-        $user->assignRole($data['roles']);
+        if (! isset($data['roles'])) { // admin by default
+            $user->assignRole('admin');
+        } else {
+            $user->assignRole($data['roles']);
+        }
 
         $user->sendEmailVerificationNotification();
 

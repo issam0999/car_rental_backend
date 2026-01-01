@@ -106,7 +106,7 @@ class CenterController extends Controller
                 'subscription_type' => $validated['subscription_type'],
             ]);
 
-            $user = User::CreateNew([
+            $user = User::createNew([
                 'name' => 'Admin for '.$center->name,
                 'email' => $center->email,
                 'center_id' => $center->id,
