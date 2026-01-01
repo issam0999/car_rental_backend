@@ -90,7 +90,7 @@ class CenterController extends Controller
     public function store(Request $request): JsonResponse
     {
         // Gate::authorize('create', Center::class);
-        Log::info('Creating center');
+        Log::error('Creating center');
         DB::beginTransaction();
         try {
             $validated = $request->validate([
