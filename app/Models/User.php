@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -80,10 +78,9 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @param  array<string, string>  $data
      */
-    public static function createNew(array $data, $password = null): User
+    public static function createNew(array $data): User
     {
         // First create the contact record
-        $password = $password ?? Str::password();
         $centerId = $data['center_id'] ?? Common::centerId();
 
         $contact = Contact::create([
@@ -96,7 +93,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
         $user = User::create([
             'email' => $data['email'],
-            'password' => Hash::make($password),
             'contact_id' => $contact->id,
             'center_id' => $centerId,
             'status' => UserStatus::Active,

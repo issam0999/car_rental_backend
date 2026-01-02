@@ -11,7 +11,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CenterController extends Controller
@@ -104,12 +103,11 @@ class CenterController extends Controller
                 'subscription_type' => $validated['subscription_type'],
             ]);
 
-            $password = Str::password(6, 4, 2);
             $user = User::createNew([
                 'name' => 'Admin for '.$center->name,
                 'email' => $center->email,
                 'center_id' => $center->id,
-            ], $password);
+            ]);
 
         });
         // Send email
