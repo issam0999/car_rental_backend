@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\CenterParameter;
 use App\Models\CenterParameterValue;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -150,5 +152,11 @@ class CenterParameterSeeder extends Seeder
         DB::table('center_parameter_values')->insert([
             ['center_parameter_id' => $docTypeId->id, 'value' => 'License Number', 'updatable' => 0, 'order' => 1, 'created_at' => now(), 'updated_at' => now()],
         ]);
+
+        // copy to center 2
+        $admin = User::find(1);
+        auth()->login($admin);
+
+        CenterParameter::copyToAnotherCenter(2);
     }
 }

@@ -122,6 +122,12 @@ class CenterParameter extends Model
         }
     }
 
+    /**
+     * Copy all parameters from one center to another.
+     *
+     * @param  int  $toCenterId  The ID of the center to copy to.
+     * @param  int  $fromCenterId  The ID of the center to copy from. Defaults to 1.
+     */
     public static function copyToAnotherCenter($toCenterId, $fromCenterId = 1)
     {
         $params = self::where('center_id', $fromCenterId)->with('values')->get();
