@@ -19,7 +19,7 @@ class CenterParameterValue extends Model
         static::deleted(fn () => Cache::forget($cacheKey));
     }
 
-    public $fillable = ['center_parameter_id', 'value', 'order'];
+    public $fillable = ['center_parameter_id', 'value', 'order', 'updatable', 'created_at'];
 
     public function parameter(): BelongsTo
     {

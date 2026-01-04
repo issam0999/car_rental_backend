@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class CenterParameter extends Model
 {
-    public $fillable = ['key', 'name', 'value', 'required', 'type'];
+    public $fillable = ['center_id', 'key', 'name', 'value', 'required', 'type'];
 
     protected static function booted(): void
     {
@@ -119,6 +119,38 @@ class CenterParameter extends Model
                 ]);
             }
 
+        }
+    }
+
+    public static function copyToAnotherCenter($toCenterId, $fromCenterId = 1)
+    {
+        $params = self::where('center_id', $fromCenterId)->with('values')->get();
+
+        foreach ($params as $param) {
+
+            $newParam = self::firstOrCreate(
+                [
+                    'center_id' => $toCenterId,
+                    'key' => $param->key,
+                ],
+                [
+                    'name' => $param->name,
+                    'value' => $param->value,
+                    'required' => $param->required,
+                    'type' => $param->type,
+                    'order' => $param->order,
+                    'subscription' => $param->subscription,
+                    'group' => $param->group,
+                    'description' => $param->description,
+                    'status' => $param->status,
+                    'created_at' => now(),
+                ]);
+            if ($param->type === 'multiselect') {
+                foreach ($param->values as $value) {
+                    CenterParameterValue::firstOrCreate(['value' => $value->value, 'center_parameter_id' => $newParam->id],
+                        ['status' => $value->status, 'updatable' => $value->updatable, 'created_at' => now(), 'order' => $value->order]);
+                }
+            }
         }
     }
 }

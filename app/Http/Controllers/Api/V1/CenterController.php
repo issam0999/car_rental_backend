@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CenterResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Center;
+use App\Models\CenterParameter;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -109,6 +110,7 @@ class CenterController extends Controller
                 'center_id' => $center->id,
             ]);
 
+            CenterParameter::copyToAnotherCenter($center->id);
         });
         // Send email
         event(new \App\Events\CenterCreated($center, $user));
