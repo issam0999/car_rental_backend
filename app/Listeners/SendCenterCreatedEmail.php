@@ -28,8 +28,7 @@ class SendCenterCreatedEmail implements ShouldQueue
         Mail::to($event->center->email)->queue(
             new MailCenterCreated(
                 $event->center->load('package'),
-                $event->user,
-                $event->password
+                $event->user
             )
         );
     }

@@ -1,19 +1,15 @@
 <x-mail::message>
-# New Center Created
+# New Subscription Created
 
 Hello,
-A new center has been created by **{{ $center->user?->name ?? 'Squarely' }}**.
-
-## Center Details
-
-- **Name:** {{ $center->name }}
-- **Email:** {{ $center->email ?? 'N/A' }}
-- **Password:** {{ $password ?? 'N/A' }}
-- **Subscription:** {{ $center->package->name ?? 'N/A' }}
+A new "{{ $center->package->name }}" subscription **{{ $center->name }}** has been created by Squarely.<br>
+The admin user to manage your center is **{{ $user->email }}**.
 
 <x-mail::button :url="url($url)">
-View Center
+Manage Center
 </x-mail::button>
+
+If you have any questions or need assistance, feel free to contact us.
 
 Thanks,<br>
 {{ config('app.name') }}

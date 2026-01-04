@@ -7,12 +7,14 @@ namespace App\Models;
 use App\Enums\ContactStatus;
 use App\Enums\UserStatus;
 use App\Helpers\Common;
+use App\Notifications\QueuedResetPassword;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Password;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -104,7 +106,8 @@ class User extends Authenticatable implements MustVerifyEmail
             $user->assignRole($data['roles']);
         }
 
-        $user->sendEmailVerificationNotification();
+        $token = Password::broker()->createToken($user);
+        $user->sendWelcomePasswordResetNotification($token);
 
         return $user;
     }
@@ -112,5 +115,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmailNotification);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new QueuedResetPassword($token));
+    }
+
+    public function sendWelcomePasswordResetNotification($token)
+    {
+        $this->notify(new QueuedResetPassword($token, true));
     }
 }

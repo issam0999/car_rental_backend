@@ -111,11 +111,7 @@ class CenterController extends Controller
 
         });
         // Send email
-        event(new \App\Events\CenterCreated(
-            $center,
-            $user,
-            $password
-        ));
+        event(new \App\Events\CenterCreated($center, $user));
 
         return ApiResponse::success(
             new CenterResource($center),

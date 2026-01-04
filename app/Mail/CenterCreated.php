@@ -19,7 +19,7 @@ class CenterCreated extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public Center $center, public User $user, public string $password
+        public Center $center, public User $user
     ) {
         //
     }

@@ -18,8 +18,7 @@ class CenterCreated
      */
     public function __construct(
         public Center $center,
-        public User $user,
-        public string $password
+        public User $user
     ) {}
 
     /**
