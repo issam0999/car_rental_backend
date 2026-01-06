@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\CarController;
 use App\Http\Controllers\Api\V1\CenterController;
 use App\Http\Controllers\Api\V1\CenterPackageController;
 use App\Http\Controllers\Api\V1\CenterParameterController;
@@ -32,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('parameters', CenterParameterController::class);
         Route::apiResource('email-templates', EmailTemplateController::class);
         Route::apiResource('roles', RoleController::class);
+        Route::get('cars/parameters', [CarController::class, 'getparameters']);
+        Route::apiResource('cars', CarController::class);
 
     });
 });
