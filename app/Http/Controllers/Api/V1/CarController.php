@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCarRequest;
+use App\Http\Requests\UpdateCarRequest;
 use App\Http\Resources\CarResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Car;
@@ -82,25 +85,44 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCarRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['center_id'] = $request->user()->center_id;
+
+        $car = Car::create($data);
+
+        if ($data['image_url']) {
+            $image = FileHelper::saveBase64Image($request->image_url, "cars/{$car->center_id}");
+            $data['image'] = $image;
+        }
+
+        return ApiResponse::success(new CarResource($car), 'Car created successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Car $car)
     {
-        //
+        return ApiResponse::success(new CarResource($car), 'Car retrieved successfully');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCarRequest $request, Car $car)
     {
-        //
+        $data = $request->validated();
+
+        $car->update($data);
+
+        if ($data['image_url']) {
+            $image = FileHelper::saveBase64Image($request->image_url, "cars/{$car->center_id}");
+            $data['image'] = $image;
+        }
+
+        return ApiResponse::success(new CarResource($car), 'Car updated successfully');
     }
 
     /**

@@ -17,8 +17,8 @@ class CarFactory extends Factory
     public function definition(): array
     {
         return [
-            'center_id' =>3,
-            'category' => $this->faker->randomElement(['sedan', 'suv', 'hatchback', 'convertible', 'truck']),
+            'center_id' => 3,
+            'category' => $this->faker->randomElement(['sedan', 'suv', 'hatchback', 'convertible']),
             'brand' => $this->faker->company(),
             'model' => $this->faker->word(),
             'year' => $this->faker->year(),
@@ -33,7 +33,7 @@ class CarFactory extends Factory
             'price_per_week' => $this->faker->randomFloat(2, 100, 1000),
             'price_per_month' => $this->faker->randomFloat(2, 300, 3000),
             'minimum_rental_days' => $this->faker->numberBetween(1, 7),
-            'status' => $this->faker->randomElement(['available', 'maintenance', 'rented']),
+            'status' => $this->faker->randomElement(['available', 'maintenance', 'rented', 'unavailable']),
         ];
     }
 }

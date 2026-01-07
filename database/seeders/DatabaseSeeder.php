@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ContactCategorySeeder::class,
             CenterParameterSeeder::class,
             RolePermissionSeeder::class,
+            CarSeeder::class,
         ]);
     }
 }
