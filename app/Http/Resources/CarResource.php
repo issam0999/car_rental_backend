@@ -20,11 +20,7 @@ class CarResource extends JsonResource
             'image' => $this->image,
             'image_url' => $this->image ? FileHelper::getImageUrl($this->image) : null,
             'center_id' => $this->center_id,
-            'category' => $this->category ? [
-                'value' => $this->category->value,
-                'title' => $this->category->title(),
-                'icon' => $this->category->icon(),
-            ] : null,
+            'category' => $this->category,
             'brand' => $this->brand,
             'model' => $this->model,
             'year' => $this->year,
@@ -40,10 +36,17 @@ class CarResource extends JsonResource
             'price_per_month' => $this->price_per_month,
             'minimum_rental_days' => $this->minimum_rental_days,
             'description' => $this->description,
-            'status' => $this->status ? [
+            'status' => $this->status,
+            'images' => ImageResource::collection($this->whenLoaded('images')),
+            'status_info' => $this->status ? [
                 'value' => $this->status,
                 'title' => $this->status->title(),
                 'color' => $this->status->color(),
+            ] : null,
+            'category_info' => $this->category ? [
+                'value' => $this->category->value,
+                'title' => $this->category->title(),
+                'icon' => $this->category->icon(),
             ] : null,
             'available' => $this->status == 'available' ? true : false,
             'created_at' => $this->created_at,

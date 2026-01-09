@@ -26,7 +26,7 @@ class UpdateCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category' => ['sometimes', Rule::enum(CarCategories::class)],
+            'category' => ['sometimes', 'nullable', Rule::enum(CarCategories::class)],
             'brand' => 'required|string|max:100',
             'model' => 'required|string|max:100',
             'year' => 'required|integer|min:2000|max:'.date('Y'),
@@ -44,7 +44,8 @@ class UpdateCarRequest extends FormRequest
             'status' => ['required', Rule::enum(CarStatuses::class)],
             'description' => 'nullable|string|max:1000',
             'center_id' => 'nullable|exists:centers,id',
-            'image' => 'nullable|image|max:2048', // max 2MB
+            'image' => ['nullable', 'string'],
+            'image_url' => 'nullable|string',
             'available' => 'required|boolean',
         ];
     }

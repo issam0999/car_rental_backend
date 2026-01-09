@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\CountryController;
 use App\Http\Controllers\Api\v1\DocumentController;
 use App\Http\Controllers\Api\V1\EmailTemplateController;
+use App\Http\Controllers\Api\V1\ImageController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('roles', RoleController::class);
         Route::get('cars/parameters', [CarController::class, 'getparameters']);
         Route::apiResource('cars', CarController::class);
-
+        Route::apiResource('images', ImageController::class);
     });
 });
 

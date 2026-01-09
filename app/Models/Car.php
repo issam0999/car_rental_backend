@@ -7,6 +7,8 @@ use App\Enums\CarFuelTypes;
 use App\Enums\CarStatuses;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Car extends Model
@@ -38,6 +40,16 @@ class Car extends Model
         'category' => CarCategories::class,
         'fuel_type' => CarFuelTypes::class,
     ];
+
+    public function center(): BelongsTo
+    {
+        return $this->belongsTo(Center::class);
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 
     public static function getParameters(): array
     {

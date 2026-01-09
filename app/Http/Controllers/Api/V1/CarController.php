@@ -90,12 +90,12 @@ class CarController extends Controller
         $data = $request->validated();
         $data['center_id'] = $request->user()->center_id;
 
-        $car = Car::create($data);
-
         if ($data['image_url']) {
-            $image = FileHelper::saveBase64Image($request->image_url, "cars/{$car->center_id}");
+            $image = FileHelper::saveBase64Image($request->image_url, "cars/{$data['center_id']}");
             $data['image'] = $image;
         }
+
+        $car = Car::create($data);
 
         return ApiResponse::success(new CarResource($car), 'Car created successfully');
     }
@@ -105,6 +105,8 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
+        $car->load('images');
+
         return ApiResponse::success(new CarResource($car), 'Car retrieved successfully');
     }
 
@@ -115,12 +117,11 @@ class CarController extends Controller
     {
         $data = $request->validated();
 
-        $car->update($data);
-
-        if ($data['image_url']) {
-            $image = FileHelper::saveBase64Image($request->image_url, "cars/{$car->center_id}");
+        if ($data['image']) {
+            $image = FileHelper::saveBase64Image($request->image, "cars/{$car->center_id}");
             $data['image'] = $image;
         }
+        $car->update($data);
 
         return ApiResponse::success(new CarResource($car), 'Car updated successfully');
     }
